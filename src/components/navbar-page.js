@@ -34,6 +34,7 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
   const [isMobile, setIsMobile] = useState(null); 
   const [showCursor, setShowCursor] = useState(true);
   const { scrollY } = useScroll();
+  const [particles, setParticles] = useState([]);
 
   // Handle scroll effects for transparency changes
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -52,6 +53,15 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
     
     return () => window.removeEventListener('resize', checkMobile);
   }, []); // Empty dependency array means it runs once after initial render
+
+  useEffect(() => {
+    const newParticles = [...Array(8)].map(() => ({
+      left: `${Math.random() * 100}%`,
+      duration: Math.random() * 3 + 2,
+      delay: Math.random() * 2,
+    }));
+    setParticles(newParticles);
+  }, []);
 
   // Blinking cursor effect
   useEffect(() => {
@@ -120,13 +130,13 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
               opacity: [0, 0.4, 0]
             }}
             transition={{
-              duration: Math.random() * 3 + 2, // This Math.random() can cause a mismatch too
+              duration: Math.random() * 3 + 2,
               repeat: Infinity,
-              delay: Math.random() * 2, // This Math.random() can cause a mismatch too
+              delay: Math.random() * 2,
               ease: "linear"
             }}
             style={{
-              left: `${Math.random() * 100}%`, // This Math.random() can cause a mismatch too
+              left: particles.left,
             }}
           />
         ))}
