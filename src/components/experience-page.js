@@ -37,15 +37,27 @@ const experiences = [
 ];
 
 const MatrixBackground = () => {
+  const [matrixItems, setMatrixItems] = useState([]);
+
+  useEffect(() => {
+    const generated = Array.from({ length: 20 }).map(() => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      delay: Math.random() * 3,
+      binary: Math.random().toString(2).substr(2, 8),
+    }));
+    setMatrixItems(generated);
+  }, []);
+
   return (
-    <div className="absolute inset-0 overflow-hidden opacity-5">
-      {Array.from({ length: 20 }).map((_, i) => (
+    <div className="absolute inset-0 overflow-hidden opacity-5 z-0">
+      {matrixItems.map((item, i) => (
         <motion.div
           key={i}
           className="absolute text-green-400 font-mono text-xs"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: item.left,
+            top: item.top,
           }}
           animate={{
             y: [0, -100],
@@ -54,10 +66,10 @@ const MatrixBackground = () => {
           transition={{
             duration: 3,
             repeat: Infinity,
-            delay: Math.random() * 3,
+            delay: item.delay,
           }}
         >
-          {Math.random().toString(2).substr(2, 8)}
+          {item.binary}
         </motion.div>
       ))}
     </div>
@@ -210,41 +222,52 @@ export const AnimatedExperienceTimeline = () => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ['start end', 'end start'],
   });
 
   const progress = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const [progressValue, setProgressValue] = useState(0);
+  const [floatingSymbols, setFloatingSymbols] = useState([]);
 
   useEffect(() => {
     const unsubscribe = progress.onChange(setProgressValue);
     return unsubscribe;
   }, [progress]);
 
+  // Generate random floating symbols only on client
+  useEffect(() => {
+    const symbols = Array.from({ length: 8 }).map((_, i) => ({
+      symbol: ['<>', '{}', '[]', '/>', '&&', '||', '=>', '::'][i],
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+    }));
+    setFloatingSymbols(symbols);
+  }, []);
+
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative min-h-screen bg-gradient-to-br from-black/80 via-gray-900/60 to-black/80 py-20 overflow-hidden"
     >
-            {/* Floating Elements */}
-            <motion.div
-              animate={{ y: [-10, 10, -10] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="absolute top-20 left-20 text-green-400"
-            >
-              <Code size={24} className="opacity-40" />
-            </motion.div>
-            
-            <motion.div
-              animate={{ y: [10, -10, 10] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="absolute bottom-32 right-20 text-blue-400"
-            >
-              <Zap size={20} className="opacity-40" />
-            </motion.div>
+      {/* Floating Icons */}
+      <motion.div
+        animate={{ y: [-10, 10, -10] }}
+        transition={{ duration: 4, repeat: Infinity }}
+        className="absolute top-20 left-20 text-green-400"
+      >
+        <Code size={24} className="opacity-40" />
+      </motion.div>
+
+      <motion.div
+        animate={{ y: [10, -10, 10] }}
+        transition={{ duration: 3, repeat: Infinity }}
+        className="absolute bottom-32 right-20 text-blue-400"
+      >
+        <Zap size={20} className="opacity-40" />
+      </motion.div>
 
       <MatrixBackground />
-      
+
       {/* Header */}
       <div className="text-center mb-16 relative z-10">
         <motion.div
@@ -253,7 +276,7 @@ export const AnimatedExperienceTimeline = () => {
           transition={{ duration: 1 }}
           className="space-y-4"
         >
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-6xl font-bold font-mono text-white mb-4">
             Experience<span className="text-green-400">.</span>
             <span className="text-blue-400">timeline</span>
             <span className="text-purple-400">()</span>
@@ -266,32 +289,26 @@ export const AnimatedExperienceTimeline = () => {
 
       {/* Timeline Container */}
       <div className="relative max-w-6xl mx-auto px-4">
-        {/* Central Timeline Line */}
         <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-1 bg-gray-700">
           <motion.div
             className="absolute top-0 left-0 w-full bg-gradient-to-b from-green-400 via-blue-500 to-purple-600"
             style={{
               height: `${progressValue * 100}%`,
-              boxShadow: '0 0 10px rgba(34, 197, 94, 0.8)'
+              boxShadow: '0 0 10px rgba(34, 197, 94, 0.8)',
             }}
           />
         </div>
 
-        {/* Timeline Items */}
         {experiences.map((experience, index) => (
           <div key={experience.id} className="relative">
             <TimelineCard experience={experience} index={index} />
-            <TimelineNode 
-              experience={experience} 
-              index={index} 
-              progress={progressValue}
-            />
+            <TimelineNode experience={experience} index={index} progress={progressValue} />
           </div>
         ))}
       </div>
 
       {/* Progress Indicator */}
-      <motion.div 
+      <motion.div
         className="fixed top-1/2 right-8 transform -translate-y-1/2 z-20 hidden md:block"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -308,15 +325,15 @@ export const AnimatedExperienceTimeline = () => {
         </div>
       </motion.div>
 
-      {/* Floating Code Elements */}
+      {/* Floating Symbols */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 8 }).map((_, i) => (
+        {floatingSymbols.map((item, i) => (
           <motion.div
             key={i}
             className="absolute text-green-400/20 font-mono text-lg"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: item.left,
+              top: item.top,
             }}
             animate={{
               x: [0, 100, 0],
@@ -330,7 +347,7 @@ export const AnimatedExperienceTimeline = () => {
               delay: i * 2,
             }}
           >
-            {['<>', '{}', '[]', '/>', '&&', '||', '=>', '::'][i]}
+            {item.symbol}
           </motion.div>
         ))}
       </div>
