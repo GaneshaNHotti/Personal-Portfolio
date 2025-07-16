@@ -20,9 +20,9 @@ import PropTypes from 'prop-types';
 
 const defaultNavItems = [
   { name: 'Home', href: '#home', icon: Home },
+  { name: 'Experience', href: '#experience', icon: Briefcase },
   { name: 'Skills', href: '#skills', icon: Code },
   { name: 'Projects', href: '#projects', icon: Monitor },
-  { name: 'Experience', href: '#experience', icon: Briefcase },
   { name: 'Contact', href: '#contact', icon: Mail },
 ];
 
