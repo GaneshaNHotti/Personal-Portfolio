@@ -244,8 +244,8 @@ export const ProgrammerHero = () => {
               transition={{ delay: 2 }}
               className="text-lg lg:text-xl text-gray-300 leading-relaxed max-w-xl"
             >
-              I specialize in building scalable full-stack web apps with modern UI/UX, AI integration, 
-              and cloud-ready architecture. Let's bring innovation to life — one line of code at a time.
+              I build robust backend systems and innovative web applications with a focus on clean, 
+              efficient code and exceptional user experiences. — one line of code at a time.
             </motion.p>
 
             {/* Skills Tags */}
