@@ -188,7 +188,7 @@ export const ProgrammerHero = () => {
         transition={{ duration: 4, repeat: Infinity }}
         className="absolute top-20 left-20 text-green-400"
       >
-        <Code size={24} className="opacity-30" />
+        <Code size={24} className="opacity-40" />
       </motion.div>
       
       <motion.div
