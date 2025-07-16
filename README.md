@@ -29,7 +29,7 @@ A modern, responsive, and interactive personal portfolio website built with Next
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/your-username/personal-portfolio.git
+   git clone https://github.com/GaneshaNHotti/personal-portfolio.git
    cd personal-portfolio
    ```
 
@@ -59,7 +59,7 @@ A modern, responsive, and interactive personal portfolio website built with Next
 
 This project is configured for deployment on Vercel. Push your code to a GitHub repository and connect it to Vercel for automatic deployments.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-username%2Fpersonal-portfolio)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGaneshaNHotti%2Fpersonal-portfolio)
 
 
 ## 🙏 Acknowledgments
