@@ -35,11 +35,21 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
   const [showCursor, setShowCursor] = useState(true);
   const { scrollY } = useScroll();
   const [particles, setParticles] = useState([]);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   // Handle scroll effects for transparency changes
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 50);
+
+    if (latest > lastScrollY) {
+      setIsVisible(false); // scrolling down
+    } else {
+      setIsVisible(true); // scrolling up
+    }
+    setLastScrollY(latest);
   });
+
 
   // Handle responsive design
   useEffect(() => {
@@ -145,9 +155,9 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
       {/* Main Navigation */}
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="fixed top-1 left-1/2 transform -translate-x-1/2 z-[100] w-full max-w-6xl px-4"
+        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -20 }}
+        transition={{ duration: 0.5}}
+        className="fixed top-1 left-1/2 transform -translate-x-1/2 z-[100] w-full max-w-7xl px-4"
         style={{ willChange: 'transform' }}
       >
         <div className="relative">
@@ -199,7 +209,7 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
               </div>
 
               {/* Navigation items */}
-              <div className={`p-3 ${isMobile ? 'flex gap-1 justify-center' : 'flex gap-2 justify-center'}`}>
+              <div className={`p-3 ${isMobile ? 'flex gap-1 justify-center' : 'flex gap-10 justify-center'}`}>
                 {navItems.map((item, index) => {
                   const Icon = item.icon;
                   const isActive = activeSection === item.href;
