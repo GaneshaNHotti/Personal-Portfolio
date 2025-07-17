@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
-import { Home, Code, Briefcase, Mail, Monitor, Cpu } from 'lucide-react';
+import { Home, Code, Briefcase, Mail, Monitor, Cpu, User } from 'lucide-react';
 import PropTypes from 'prop-types';
 
 // ... (typedefs and defaultNavItems remain the same) ...
@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 
 const defaultNavItems = [
   { name: 'Home', href: '#home', icon: Home },
+  { name: 'About', href: '#about', icon: User},
   { name: 'Experience', href: '#experience', icon: Briefcase },
   { name: 'Skills', href: '#skills', icon: Code },
   { name: 'Projects', href: '#projects', icon: Monitor },

@@ -1,6 +1,7 @@
 import FloatingProgrammerNav from "../components/navbar-page";
 import ProgrammerHero from "../components/home-page";
 import AnimatedExperienceTimeline from "../components/experience-page";
+import AboutSection from "../components/about-page";
 
 export default function Home() {
   return (
@@ -10,6 +11,9 @@ export default function Home() {
       </section>
       <section id="home">
         <ProgrammerHero />
+      </section>
+      <section id="about">
+        <AboutSection />
       </section>
       <section id="experience">
         <AnimatedExperienceTimeline />
