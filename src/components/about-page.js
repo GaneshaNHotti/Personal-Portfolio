@@ -38,7 +38,7 @@ const AboutTitle = () => (
       <span className="text-purple-400">()</span>
     </h2>
     <p className="mt-2 text-green-400 font-mono text-sm lg:text-base tracking-wide">
-      // Unpacking the developer behind the screen
+        {"// Unpacking the developer behind the screen"}
     </p>
   </div>
 );
