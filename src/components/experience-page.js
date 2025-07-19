@@ -277,8 +277,8 @@ export const AnimatedExperienceTimeline = () => {
           className="space-y-4"
         >
           <h2 className="text-4xl md:text-6xl font-bold font-mono text-white mb-4">
-            Experience<span className="text-green-400">.</span>
-            <span className="text-blue-400">timeline</span>
+            experience<span className="text-green-400">.</span>
+            <span className="text-blue-400">Timeline</span>
             <span className="text-purple-400">()</span>
           </h2>
           <div className="font-mono text-green-400 text-sm">
