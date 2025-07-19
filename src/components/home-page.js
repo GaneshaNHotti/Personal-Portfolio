@@ -224,7 +224,7 @@ export const ProgrammerHero = () => {
             <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight">
                 Hi, I&apos;m{' '}
                 <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-                  <TypingEffect text="Ganesha N Hotti" delay={800} />
+                  <TypingEffect text="Ganesha N Hotti" delay={20} />
                 </span>
               </h1>
               <motion.h2
