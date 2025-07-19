@@ -284,9 +284,12 @@ export const ProgrammerHero = () => {
                 variant="outline"
                 size="lg"
                 className="border-green-500/50 text-green-400 hover:bg-green-500/10 hover:border-green-400 group transition-all duration-300"
+                asChild
               >
-                Download Resume
-                <Download className="ml-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
+                <a href="/Ganesha_N_Hotti.pdf" download>
+                  Download Resume
+                  <Download className="ml-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
+                </a>
               </Button>
             </motion.div>
           </motion.div>
