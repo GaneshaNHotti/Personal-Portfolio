@@ -72,7 +72,6 @@ const MatrixRain = () => {
   const [drops, setDrops] = useState([]);
 
   useEffect(() => {
-    const characters = '01010110100101010011101100010110101001011010';
     const newDrops = Array.from({ length: 20 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
@@ -363,6 +362,20 @@ const CategoryHeader = ({ category, index }) => {
   );
 };
 
+const SkillsTitle = () => (
+  <div className="text-center mb-10">
+    <h2 className="text-4xl lg:text-6xl font-bold text-white font-mono mb-4">
+      <span className="text-white">developer</span>
+      <span className="text-blue-400">.Skills</span>
+      <span className="text-purple-400">()</span>
+    </h2>
+    <p className="mt-2 text-green-400 font-mono text-sm lg:text-base tracking-wide">
+      {"// A breakdown of my technical stack and coding arsenal"}
+    </p>
+  </div>
+);
+
+
 export const AnimatedSkillsGrid = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-20 px-4 relative overflow-hidden">
@@ -395,21 +408,7 @@ export const AnimatedSkillsGrid = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <motion.h1 
-            className="text-5xl md:text-6xl font-bold mb-6 font-mono"
-            style={{
-              background: 'linear-gradient(45deg, #00ff41, #00d4aa, #0099ff)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: '0 0 30px #00ff4150'
-            }}
-            animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-            }}
-            transition={{ duration: 5, repeat: Infinity }}
-          >
-            ./skills --matrix
-          </motion.h1>
+          <SkillsTitle />
           <motion.div className="flex items-center justify-center space-x-2 text-green-400 text-xl font-mono">
             <Terminal className="w-6 h-6" />
             <motion.span
