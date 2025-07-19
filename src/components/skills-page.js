@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Code2, Database, Cloud, Brain, Terminal, Cpu, Zap, Globe, Server, MonitorSpeaker, Layers, GitBranch, Code, FastForward, Webhook } from 'lucide-react';
+import { Code2, Database, Cloud, Terminal, Zap, Globe, Server, Layers, GitBranch, Code, FastForward, Webhook, 
+  Container, FileCode2, SquareCode, SquarePi, MailPlus, SquareChartGantt, Wrench } from 'lucide-react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 
 /**
@@ -29,7 +30,7 @@ const skillCategories = [
     skills: [
       { name: "Angular", level: 80, icon: <Code2 className="w-5 h-5" />, color: "#00ff41", description: "Component-based framework" },
       { name: "JavaScript", level: 75, icon: <Globe className="w-5 h-5" />, color: "#00d4aa", description: "Web scripting language" },
-      { name: "TypeScript", level: 75, icon: <Terminal className="w-5 h-5" />, color: "#0099ff", description: "Type-safe development" },
+      { name: "TypeScript", level: 75, icon: <FileCode2 className="w-5 h-5" />, color: "#0099ff", description: "Type-safe development" },
       { name: "Tailwind CSS", level: 50, icon: <Layers className="w-5 h-5" />, color: "#06b6d4", description: "Responsive design systems" }
     ]
   },
@@ -40,7 +41,7 @@ const skillCategories = [
     skills: [
       { name: "Python", level: 90, icon: <Terminal className="w-5 h-5" />, color: "#ffff00", description: "Backend & automation" },
       { name: "Fast API", level: 60, icon: <FastForward className="w-5 h-5" />, color: "#00ff41", description: "High-speed APIs" },
-      { name: "Flask API", level: 40, icon: <Webhook  className="w-5 h-5" />, color: "#00d4aa", description: "Lightweight backend" },
+      { name: "Flask API", level: 60, icon: <Webhook  className="w-5 h-5" />, color: "#00d4aa", description: "Lightweight backend" },
       { name: "MySQL", level: 70, icon: <Database className="w-5 h-5" />, color: "#00ff41", description: "Relational databases" }
     ]
   },
@@ -49,7 +50,7 @@ const skillCategories = [
     icon: <Cloud className="w-6 h-6" />,
     gradient: "from-purple-400/20 to-purple-600/20",
     skills: [
-      { name: "Docker", level: 80, icon: <Cloud className="w-5 h-5" />, color: "#0099ff", description: "Containerization" },
+      { name: "Docker", level: 70, icon: <Container className="w-5 h-5" />, color: "#0099ff", description: "Containerization" },
       { name: "Azure", level: 35, icon: <Cloud className="w-5 h-5" />, color: "#ffaa00", description: "Cloud infrastructure" },
       { name: "Git", level: 90, icon: <GitBranch className="w-5 h-5" />, color: "#ff6600", description: "Version control" },
       { name: "Linux", level: 85, icon: <Terminal className="w-5 h-5" />, color: "#00ff41", description: "System administration" }
@@ -57,13 +58,13 @@ const skillCategories = [
   },
   {
     title: "Tools",
-    icon: <Brain className="w-6 h-6" />,
+    icon: <Wrench className="w-6 h-6" />,
     gradient: "from-yellow-400/20 to-orange-600/20",
     skills: [
-      { name: "VSCode", level: 100, icon: <Brain className="w-5 h-5" />, color: "#ff6600", description: "Code editor" },
-      { name: "PyCharm", level: 100, icon: <Cpu className="w-5 h-5" />, color: "#00ff41", description: "Python IDE" },
-      { name: "Postman", level: 100, icon: <Zap className="w-5 h-5" />, color: "#ffff00", description: "API testing tool" },
-      { name: "Jira", level: 100, icon: <MonitorSpeaker className="w-5 h-5" />, color: "#ff00ff", description: "Project management" }
+      { name: "VSCode", level: 100, icon: <SquareCode className="w-5 h-5" />, color: "#ff6600", description: "Code editor" },
+      { name: "PyCharm", level: 100, icon: <SquarePi className="w-5 h-5" />, color: "#00ff41", description: "Python IDE" },
+      { name: "Postman", level: 100, icon: <MailPlus className="w-5 h-5" />, color: "#ffff00", description: "API testing tool" },
+      { name: "Jira", level: 100, icon: <SquareChartGantt className="w-5 h-5" />, color: "#ff00ff", description: "Project management" }
     ]
   }
 ];
