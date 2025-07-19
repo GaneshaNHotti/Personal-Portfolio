@@ -378,6 +378,17 @@ const SkillsTitle = () => (
 
 
 export const AnimatedSkillsGrid = () => {
+  const [shapes, setShapes] = useState([]);
+
+  useEffect(() => {
+    const generatedShapes = Array.from({ length: 6 }).map(() => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      duration: 20 + Math.random() * 10,
+    }));
+    setShapes(generatedShapes);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-20 px-4 relative overflow-hidden">
               {/* Gradient Overlay */}
@@ -461,13 +472,13 @@ export const AnimatedSkillsGrid = () => {
 
       {/* Floating geometric shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 6 }).map((_, i) => (
+        {shapes.map((shape, i) => (
           <motion.div
             key={i}
             className="absolute opacity-10"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: shape.left,
+              top: shape.top,
             }}
             animate={{
               rotate: 360,
@@ -475,7 +486,7 @@ export const AnimatedSkillsGrid = () => {
               opacity: [0.1, 0.3, 0.1]
             }}
             transition={{
-              duration: 20 + Math.random() * 10,
+              duration: shape.duration,
               repeat: Infinity,
               ease: "linear"
             }}
