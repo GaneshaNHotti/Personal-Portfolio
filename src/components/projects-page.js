@@ -139,7 +139,7 @@ const projects = [
   }
 ];
 
-const ProjetcsTitle = () => (
+const ProjectsTitle = () => (
   <div className="text-center mb-10">
     <h2 className="text-4xl lg:text-6xl font-bold text-white font-mono mb-4">
       <span className="text-white">build</span>
@@ -224,7 +224,7 @@ export const AnimatedProjectsGrid = () => {
               ease: "linear"
             }}
           >
-            <ProjetcsTitle />
+            <ProjectsTitle />
           </motion.h2>
         </motion.div>
 
