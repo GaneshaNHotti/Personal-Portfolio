@@ -3,6 +3,7 @@ import ProgrammerHero from "../components/home-page";
 import AnimatedExperienceTimeline from "../components/experience-page";
 import AboutSection from "../components/about-page";
 import AnimatedSkillsGrid from "../components/skills-page";
+import AnimatedProjectsGrid from "../components/projects-page";
 
 export default function Home() {
   return (
@@ -21,6 +22,9 @@ export default function Home() {
       </section>
       <section id="skills">
         <AnimatedSkillsGrid/>
+      </section>
+      <section id="projects">
+        <AnimatedProjectsGrid />
       </section>
     </main>
   );
