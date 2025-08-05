@@ -69,47 +69,6 @@ const skillCategories = [
   }
 ];
 
-const MatrixRain = () => {
-  const [drops, setDrops] = useState([]);
-
-  useEffect(() => {
-    const newDrops = Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      speed: 0.5 + Math.random() * 1,
-      opacity: 0.1 + Math.random() * 0.3
-    }));
-    setDrops(newDrops);
-  }, []);
-
-  return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
-      {drops.map((drop) => (
-        <motion.div
-          key={drop.id}
-          className="absolute text-green-400 font-mono text-xs"
-          style={{ left: `${drop.x}%` }}
-          animate={{
-            y: ['0vh', '100vh'],
-            opacity: [drop.opacity, 0]
-          }}
-          transition={{
-            duration: 20 / drop.speed,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        >
-          {Array.from({ length: 10 }, (_, i) => (
-            <div key={i} className="mb-1">
-              {Math.random() > 0.5 ? '1' : '0'}
-            </div>
-          ))}
-        </motion.div>
-      ))}
-    </div>
-  );
-};
 
 const SkillCard = ({ skill, index, categoryIndex }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -409,7 +368,6 @@ export const AnimatedSkillsGrid = () => {
                     >
                       <Zap size={20} className="opacity-40" />
                     </motion.div>
-      <MatrixRain />
       
       {/* Main content */}
       <div className="max-w-7xl mx-auto relative z-10">
