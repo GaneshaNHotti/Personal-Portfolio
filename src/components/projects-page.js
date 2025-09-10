@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, Code, Zap, Users, BarChart3 } from "lucide-react";
+import { ExternalLink, Github, Code, Zap, Users, BarChart3, MessagesSquare } from "lucide-react";
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 
@@ -106,13 +106,13 @@ const MatrixBackground = () => {
 const projects = [
   {
     id: 1,
-    title: "TBD",
-    description: "TBD",
+    title: "Real Time Chat Application",
+    description: "Built a real-time chat application using FastAPI, React, and Socket.io. Implemented user authentication with JWT and styled the frontend with Tailwind CSS.",
     image: "/api/placeholder/400/250",
-    tech: ["TBD"],
+    tech: ["Python", "FastAPI", "React", "Socket.io", "Tailwind CSS", "Docker"],
     liveUrl: "#",
-    githubUrl: "#",
-    icon: Code,
+    githubUrl: "https://github.com/GaneshaNHotti/Chat-App",
+    icon: MessagesSquare,
     gradient: "from-emerald-500 to-blue-500"
   },
   {
@@ -343,6 +343,7 @@ export const AnimatedProjectsGrid = () => {
                         <Button 
                           variant="outline"
                           className="border-gray-600 text-gray-300 hover:text-white hover:border-purple-500 hover:bg-purple-500/10 group"
+                          onClick={() => window.open(project.githubUrl, "_blank")}
                         >
                           <Github className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
                         </Button>
@@ -368,11 +369,12 @@ export const AnimatedProjectsGrid = () => {
           >
             <Button 
               size="lg"
+              onClick={() => window.open("https://github.com/GaneshaNHotti", "_blank")}
               className="bg-gradient-to-r from-purple-600 to-emerald-600 hover:from-purple-500 hover:to-emerald-500 text-white font-semibold px-8 py-3 group"
             >
               <Zap className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" />
               View All Projects
-            </Button>
+            </Button  >
           </motion.div>
         </motion.div>
       </div>
