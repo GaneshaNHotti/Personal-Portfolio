@@ -4,6 +4,7 @@ import AnimatedExperienceTimeline from "../components/experience-page";
 import AboutSection from "../components/about-page";
 import AnimatedSkillsGrid from "../components/skills-page";
 import AnimatedProjectsGrid from "../components/projects-page";
+import AnimatedContactForm from "../components/contact-page";
 
 export default function Home() {
   return (
@@ -25,6 +26,9 @@ export default function Home() {
       </section>
       <section id="projects">
         <AnimatedProjectsGrid />
+      </section>
+      <section id="contact">
+        <AnimatedContactForm />
       </section>
     </main>
   );
