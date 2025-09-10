@@ -101,34 +101,8 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
 
   return (
     <>
-      {/* Matrix-style background particles - This section is more tricky with Math.random() */}
-      {/* For these, you might also consider only rendering them on the client,
-          or ensuring that motion/react handles any initial discrepancies gracefully.
-          However, the `isMobile` issue is the primary one. */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-0.5 h-0.5 bg-emerald-400 rounded-full opacity-20"
-            animate={{
-              y: ['100vh', '-10px'],
-              opacity: [0, 0.4, 0]
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-              ease: "linear"
-            }}
-            style={{
-              left: particles.left,
-            }}
-          />
-        ))}
-      </div>
-
       {/* Main Navigation */}
-      <motion.nav className="fixed top-2 w-full z-[100] px-4">
+      <motion.nav className="fixed top-2 w-full z-[100]">
         <div className="relative">
           <motion.div 
             className="relative backdrop-blur-xl border border-emerald-400/40 shadow-2xl shadow-emerald-400/20"
@@ -145,7 +119,7 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
               />
 
               {/* Navigation items */}
-              <div className={`p-3 ${isMobile ? 'flex gap-1 justify-center' : 'flex gap-10 justify-center'}`}>
+              <div className={`p-3 ${isMobile ? 'flex gap-1 justify-center' : 'flex gap-20 justify-center'}`}>
                 {navItems.map((item, index) => {
                   const Icon = item.icon;
                   const isActive = activeSection === item.href;
