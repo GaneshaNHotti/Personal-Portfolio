@@ -28,29 +28,12 @@ const defaultNavItems = [
 ];
 
 export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('#home');
   // Initialize isMobile to null or undefined.
   // This signifies that the client-side check hasn't happened yet.
   const [isMobile, setIsMobile] = useState(null); 
-  const [showCursor, setShowCursor] = useState(true);
   const { scrollY } = useScroll();
   const [particles, setParticles] = useState([]);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  // Handle scroll effects for transparency changes
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 50);
-
-    if (latest > lastScrollY) {
-      setIsVisible(false); // scrolling down
-    } else {
-      setIsVisible(true); // scrolling up
-    }
-    setLastScrollY(latest);
-  });
-
 
   // Handle responsive design
   useEffect(() => {
@@ -72,15 +55,6 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
       delay: Math.random() * 2,
     }));
     setParticles(newParticles);
-  }, []);
-
-  // Blinking cursor effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 800);
-    
-    return () => clearInterval(interval);
   }, []);
 
   // Handle smooth scrolling
@@ -154,60 +128,21 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
       </div>
 
       {/* Main Navigation */}
-      <motion.nav
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -20 }}
-        transition={{ duration: 0.5}}
-        className="fixed top-1 left-1/2 transform -translate-x-1/2 z-[100] w-full max-w-7xl px-4"
-        style={{ willChange: 'transform' }}
-      >
+      <motion.nav className="fixed top-2 w-full z-[100] px-4">
         <div className="relative">
           <motion.div 
-            className="relative backdrop-blur-xl border border-emerald-400/40 rounded-lg shadow-2xl shadow-emerald-400/20"
-            animate={{
-              backgroundColor: isScrolled ? "rgba(17, 24, 39, 0.90)" : "rgba(17, 24, 39, 0.75)",
-              borderColor: isScrolled ? "rgba(52, 211, 153, 0.5)" : "rgba(52, 211, 153, 0.4)",
-              boxShadow: isScrolled 
-                ? "0 25px 50px -12px rgba(52, 211, 153, 0.25), 0 0 0 1px rgba(52, 211, 153, 0.1)" 
-                : "0 20px 25px -5px rgba(52, 211, 153, 0.1), 0 0 0 1px rgba(52, 211, 153, 0.05)"
-            }}
-            transition={{ duration: 0.3 }}
+            className="relative backdrop-blur-xl border border-emerald-400/40 shadow-2xl shadow-emerald-400/20"
           >
-            <div className="relative overflow-hidden rounded-lg">
+            <div className="relative overflow-hidden">
               {/* Animated glow effect */}
               <motion.div 
                 className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-emerald-400/5 to-emerald-400/10"
-                animate={{ 
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-                }}
                 transition={{ 
                   duration: 4, 
                   repeat: Infinity,
                   ease: "linear"
                 }}
               />
-              
-              {/* Terminal prompt */}
-              <div className="px-4 py-2 border-b border-emerald-400/20 bg-gray-800/40 backdrop-blur-sm">
-                <div className="text-emerald-400 text-sm font-mono flex items-center gap-2">
-                  <Cpu className="w-4 h-4" />
-                  <span className="text-gray-400">user@portfolio:</span>
-                  <span className="text-white">~$</span>
-                  <span className="text-emerald-400">navigate</span>
-                  <AnimatePresence>
-                    {showCursor && (
-                      <motion.span 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="text-emerald-400"
-                      >
-                        |
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
 
               {/* Navigation items */}
               <div className={`p-3 ${isMobile ? 'flex gap-1 justify-center' : 'flex gap-10 justify-center'}`}>
@@ -307,29 +242,6 @@ export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
                   );
                 })}
               </div>
-
-              {/* Terminal output status */}
-              <motion.div 
-                className="px-4 py-2 border-t border-emerald-400/20 bg-gray-800/40 backdrop-blur-sm"
-                animate={{ backgroundColor: isScrolled ? "rgba(31, 41, 55, 0.6)" : "rgba(31, 41, 55, 0.4)" }}
-              >
-                <div className="text-emerald-400/70 text-xs font-mono flex items-center gap-2">
-                  <motion.div
-                    animate={{ 
-                      scale: [1, 1.2, 1],
-                      opacity: [0.5, 1, 0.5] 
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="w-1.5 h-1.5 bg-emerald-400 rounded-full"
-                  />
-                  <span className="text-emerald-400">Status:</span>
-                  <span className="text-gray-400">Navigation Active</span>
-                  <span className="text-gray-500">|</span>
-                  <span className="text-emerald-300">
-                    {navItems.find(item => item.href === activeSection)?.name.toLowerCase() || 'home'}_loaded
-                  </span>
-                </div>
-              </motion.div>
             </div>
           </motion.div>
         </div>
