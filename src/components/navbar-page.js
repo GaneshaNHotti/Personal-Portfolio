@@ -1,237 +1,202 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react';
-import { Home, Code, Briefcase, Mail, Monitor, Cpu, User } from 'lucide-react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Github,
+  User,
+  Briefcase,
+  Code2,
+  Monitor,
+  Mail,
+  Home,
+  Linkedin,
+  Menu,
+  X,
+} from "lucide-react";
 
-// ... (typedefs and defaultNavItems remain the same) ...
-/**
- * @typedef {Object} NavItem
- * @property {string} name - The display name of the navigation item
- * @property {string} href - The URL hash the item links to
- * @property {React.ComponentType} icon - The icon component to display
- */
-
-/**
- * @typedef {Object} FloatingProgrammerNavProps
- * @property {Array<NavItem>} [navItems] - Array of navigation items
- */
-
-const defaultNavItems = [
-  { name: 'Home', href: '#home', icon: Home },
-  { name: 'About', href: '#about', icon: User},
-  { name: 'Experience', href: '#experience', icon: Briefcase },
-  { name: 'Skills', href: '#skills', icon: Code },
-  { name: 'Projects', href: '#projects', icon: Monitor },
-  { name: 'Contact', href: '#contact', icon: Mail },
+const navItems = [
+  { name: "home", href: "home", icon: Home },
+  { name: "about", href: "about", icon: User },
+  { name: "experience", href: "experience", icon: Briefcase },
+  { name: "skills", href: "skills", icon: Code2 },
+  { name: "projects", href: "projects", icon: Monitor },
+  { name: "contact", href: "contact", icon: Mail },
 ];
 
-export const FloatingProgrammerNav = ({ navItems = defaultNavItems }) => {
-  const [activeSection, setActiveSection] = useState('#home');
-  // Initialize isMobile to null or undefined.
-  // This signifies that the client-side check hasn't happened yet.
-  const [isMobile, setIsMobile] = useState(null); 
-  const { scrollY } = useScroll();
-  const [particles, setParticles] = useState([]);
+export default function Navbar() {
+  const [activeSection, setActiveSection] = useState("home");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [indicatorStyle, setIndicatorStyle] = useState({});
+  const refs = useRef({});
 
-  // Handle responsive design
-  useEffect(() => {
-    // This code only runs on the client after initial hydration
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile(); // Set initial state based on client's window size
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []); // Empty dependency array means it runs once after initial render
-
-  useEffect(() => {
-    const newParticles = [...Array(8)].map(() => ({
-      left: `${Math.random() * 100}%`,
-      duration: Math.random() * 3 + 2,
-      delay: Math.random() * 2,
-    }));
-    setParticles(newParticles);
-  }, []);
-
-  // Handle smooth scrolling
-  const handleNavClick = (href) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start' 
-      });
-    }
+  // Function to update indicator position
+  const updateIndicatorPosition = (section) => {
+    // Use setTimeout to ensure DOM has updated
+    setTimeout(() => {
+      const el = refs.current[section];
+      if (el) {
+        setIndicatorStyle({
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+        });
+      }
+    }, 10);
   };
 
-  // Track active section with improved logic
+  // scroll tracking
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = navItems.map(item => item.href.substring(1));
-      const scrollPosition = window.scrollY + 100;
+    const onScroll = () => {
+      const offset = 100;
+      const scrollPos = window.scrollY + offset;
 
-      let currentSection = '#home';
-      
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop } = element;
-          if (scrollPosition >= offsetTop - 50) {
-            currentSection = `#${section}`;
-            break;
-          }
+      let current = navItems[0].href;
+      for (let i = navItems.length - 1; i >= 0; i--) {
+        const el = document.getElementById(navItems[i].href);
+        if (el && el.offsetTop <= scrollPos) {
+          current = navItems[i].href;
+          break;
         }
       }
       
-      setActiveSection(currentSection);
+      if (current !== activeSection) {
+        setActiveSection(current);
+        updateIndicatorPosition(current);
+      }
     };
 
-    // Only add event listener if window is defined (i.e., on client)
-    if (typeof window !== 'undefined') {
-        handleScroll(); // Set initial active section on client
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }
-  }, [navItems]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [activeSection]);
+
+  // Initialize indicator position on mount and when refs change
+  useEffect(() => {
+    updateIndicatorPosition(activeSection);
+  }, [activeSection]);
+
+  // Also update on window resize to handle responsive changes
+  useEffect(() => {
+    const handleResize = () => {
+      updateIndicatorPosition(activeSection);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [activeSection]);
+
+  const handleNavClick = (href, e) => {
+    if (e) e.preventDefault();
+    setActiveSection(href);
+    updateIndicatorPosition(href);
+    
+    const el = document.getElementById(href);
+    history.replaceState(null, "", `#${href}`);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+    setMobileOpen(false);
+  };
 
   return (
-    <>
-      {/* Main Navigation */}
-      <motion.nav className="fixed top-2 w-full z-[100]">
-        <div className="relative">
-          <motion.div 
-            className="relative backdrop-blur-xl border border-emerald-400/40 shadow-2xl shadow-emerald-400/20"
-          >
-            <div className="relative overflow-hidden">
-              {/* Animated glow effect */}
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-emerald-400/5 to-emerald-400/10"
-                transition={{ 
-                  duration: 4, 
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              />
+    <nav className="fixed top-0 left-0 w-full z-[100]">
+      <div className="w-full backdrop-blur-sm border-b border-emerald-400/40 bg-gray-900/80 shadow-lg shadow-emerald-400/20">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-14 relative">
+          {/* Brand */}
+          <div className="font-mono font-bold text-emerald-400 tracking-widest">
+            GNH
+          </div>
 
-              {/* Navigation items */}
-              <div className={`p-3 ${isMobile ? 'flex gap-1 justify-center' : 'flex gap-20 justify-center'}`}>
-                {navItems.map((item, index) => {
-                  const Icon = item.icon;
-                  const isActive = activeSection === item.href;
-                  
-                  return (
-                    <motion.button
-                      key={item.name}
-                      onClick={() => handleNavClick(item.href)}
-                      className={`
-                        relative group rounded-lg transition-all duration-300 font-mono text-sm 
-                        border backdrop-blur-sm
-                        ${isActive 
-                          ? 'bg-emerald-400/20 border-emerald-400/60 text-emerald-300 shadow-lg shadow-emerald-400/30' 
-                          : 'border-emerald-400/20 text-gray-300 hover:text-emerald-400 hover:bg-emerald-400/10 hover:border-emerald-400/40'
-                        }
-                        ${
-                            // Render based on `isMobile` only when it's been determined on the client
-                            isMobile === null 
-                                ? 'px-4 py-2.5' // Default for SSR (desktop-first) or before client check
-                                : isMobile ? 'p-2.5' : 'px-4 py-2.5'
-                        }
-                      `}
-                      whileHover={{ 
-                        scale: 1.05,
-                        transition: { duration: 0.2 }
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      {/* Hover glow effect */}
-                      <motion.div 
-                        className="absolute inset-0 rounded-lg bg-gradient-to-r from-emerald-400/0 via-emerald-400/20 to-emerald-400/0 opacity-0 group-hover:opacity-100"
-                        animate={{ opacity: isActive ? 0.3 : 0 }}
-                        whileHover={{ opacity: 0.5 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                      
-                      <div className="relative flex items-center gap-2">
-                        <Icon className={`w-4 h-4 transition-colors ${isActive ? 'text-emerald-400' : 'group-hover:text-emerald-400'}`} />
-                        {/* Only render this span if isMobile is explicitly false (i.e., desktop) */}
-                        {isMobile === false && (
-                          <>
-                            <span className="text-emerald-400/60">[</span>
-                            <span className="group-hover:text-white transition-colors">
-                              {item.name.toLowerCase()}
-                            </span>
-                            <span className="text-emerald-400/60">]</span>
-                          </>
-                        )}
-                        {/* For mobile, you might want a different rendering or just the icon */}
-                        {isMobile === true && (
-                          // Optionally render something else for mobile if needed, or nothing for just icon
-                          // For example, if you want a tooltip for mobile:
-                          // <span className="sr-only">{item.name}</span> 
-                          null
-                        )}
-                        {/* During SSR or before client check, render desktop version */}
-                        {isMobile === null && (
-                            <>
-                                <span className="text-emerald-400/60">[</span>
-                                <span className="group-hover:text-white transition-colors">
-                                  {item.name.toLowerCase()}
-                                </span>
-                                <span className="text-emerald-400/60">]</span>
-                            </>
-                        )}
-                      </div>
+          {/* Desktop nav */}
+          <div className="hidden md:flex gap-8 relative">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.href}
+                  href={`#${item.href}`}
+                  ref={(el) => (refs.current[item.href] = el)}
+                  onClick={(e) => handleNavClick(item.href, e)}
+                  className={`relative flex items-center gap-1 font-mono text-sm transition-colors ${
+                    activeSection === item.href
+                      ? "text-emerald-400"
+                      : "text-gray-300 hover:text-emerald-300"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>[ {item.name.toLowerCase()} ]</span>
+                </a>
+              );
+            })}
 
-                      {/* Active indicator */}
-                      <AnimatePresence>
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeIndicator"
-                            className="absolute bottom-0 left-1/2 w-2 h-0.5 bg-emerald-400 rounded-full shadow-emerald-400/80 shadow-sm"
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0 }}
-                            style={{ transform: 'translateX(-50%)' }}
-                          />
-                        )}
-                      </AnimatePresence>
+            {/* single underline indicator */}
+            <motion.div
+              className="absolute -bottom-1 h-0.5 bg-emerald-400 rounded-full"
+              style={indicatorStyle}
+              animate={indicatorStyle}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            />
+          </div>
 
-                      {/* Scan line effect on hover */}
-                      <motion.div
-                        className="absolute inset-0 border border-emerald-400/40 rounded-lg opacity-0 group-hover:opacity-100"
-                        animate={{
-                          borderColor: ['rgba(52, 211, 153, 0.4)', 'rgba(52, 211, 153, 0.8)', 'rgba(52, 211, 153, 0.4)']
-                        }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      />
-                    </motion.button>
-                  );
-                })}
-              </div>
+          {/* Right: socials + mobile toggle */}
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex gap-4">
+              <a
+                href="https://github.com/GaneshaNHotti"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Github className="w-5 h-5 text-gray-300 hover:text-emerald-400 transition-colors" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/ganeshanhotti/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Linkedin className="w-5 h-5 text-gray-300 hover:text-emerald-400 transition-colors" />
+              </a>
+              <a href="mailto:ganeshahotti5112000@gmail.com">
+                <Mail className="w-5 h-5 text-gray-300 hover:text-emerald-400 transition-colors" />
+              </a>
             </div>
-          </motion.div>
+            <button
+              className="md:hidden text-gray-300 hover:text-emerald-400 transition-colors"
+              onClick={() => setMobileOpen((s) => !s)}
+            >
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
-      </motion.nav>
-    </>
+
+        {/* Mobile menu */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden bg-gray-900/95 border-t border-emerald-400/40 px-6 py-4 space-y-4"
+            >
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.href}
+                    onClick={() => handleNavClick(item.href)}
+                    className={`w-full flex items-center gap-2 font-mono text-sm ${
+                      activeSection === item.href
+                        ? "text-emerald-400"
+                        : "text-gray-300 hover:text-emerald-300"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{item.name.toLowerCase()}</span>
+                  </button>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </nav>
   );
-};
-
-export default FloatingProgrammerNav;
-
-FloatingProgrammerNav.propTypes = {
-  navItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      href: PropTypes.string.isRequired,
-      icon: PropTypes.elementType.isRequired
-    })
-  )
-};
+}
