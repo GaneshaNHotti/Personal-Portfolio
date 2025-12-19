@@ -55,15 +55,3 @@ A modern, responsive, and interactive personal portfolio website built with Next
 - Modify the color scheme in `tailwind.config.js`
 - Add/remove sections as needed in `app/page.js`
 
-## 📦 Deployment
-
-This project is configured for deployment on Vercel. Push your code to a GitHub repository and connect it to Vercel for automatic deployments.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGaneshaNHotti%2Fpersonal-portfolio)
-
-
-## 🙏 Acknowledgments
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Framer Motion Documentation](https://www.framer.com/motion/)
