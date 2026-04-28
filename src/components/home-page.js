@@ -1,29 +1,44 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Button } from './ui/button';
-import { Download, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Button } from "./ui/button";
+import { Download, ArrowRight } from "lucide-react";
 
 const BlobBackground = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
     <motion.div
       className="absolute w-[700px] h-[700px] rounded-full"
-      style={{ background: "rgba(255,255,255,0.03)", filter: 'blur(180px)', top: '-20%', left: '-10%' }}
+      style={{
+        background: "rgba(255,255,255,0.03)",
+        filter: "blur(180px)",
+        top: "-20%",
+        left: "-10%",
+      }}
       animate={{ x: [0, 80, 0], y: [0, 60, 0], scale: [1, 1.15, 1] }}
-      transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+      transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
     />
     <motion.div
       className="absolute w-[500px] h-[500px] rounded-full"
-      style={{ background: "rgba(255,255,255,0.02)", filter: 'blur(140px)', bottom: '-10%', right: '-5%' }}
+      style={{
+        background: "rgba(255,255,255,0.02)",
+        filter: "blur(140px)",
+        bottom: "-10%",
+        right: "-5%",
+      }}
       animate={{ x: [0, -50, 0], y: [0, -40, 0], scale: [1, 1.1, 1] }}
-      transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 8 }}
+      transition={{
+        duration: 18,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: 8,
+      }}
     />
   </div>
 );
 
 const TypingEffect = ({ text }) => {
-  const [displayText, setDisplayText] = useState('');
+  const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -40,15 +55,38 @@ const TypingEffect = ({ text }) => {
     <>
       {displayText}
       <motion.span
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.7, repeat: Infinity }}
+        initial={{ opacity: 1 }}
+        animate={{
+          opacity: currentIndex < text.length ? [1, 0] : 0,
+        }}
+        transition={{
+          opacity: {
+            repeat: currentIndex < text.length ? Infinity : 0,
+            duration: 0.7,
+          },
+        }}
         className="inline-block w-[3px] h-[0.8em] bg-white/50 ml-1 align-middle"
       />
     </>
   );
 };
 
-const skillChips = ['Python', 'Angular', 'FastAPI', 'TypeScript', 'Docker', 'MySQL', 'Azure', 'Git'];
+const skillChips = [
+  "Python",
+  "FastAPI",
+  "Flask",
+  "React",
+  "Redux",
+  "Angular",
+  "JavaScript",
+  "TypeScript",
+  "MySQL",
+  "PostgreSQL",
+  "Docker",
+  "Azure",
+  "AWS",
+  "Git",
+];
 
 const ProgrammerHero = () => {
   return (
@@ -57,7 +95,6 @@ const ProgrammerHero = () => {
 
       <div className="relative z-10 w-full max-w-7xl mx-auto pt-16 pb-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
           {/* ── Main hero card ── */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -96,7 +133,8 @@ const ProgrammerHero = () => {
                 className="text-white/35 leading-relaxed text-base lg:text-lg max-w-xl"
               >
                 I build robust backend systems and innovative web applications
-                with a focus on clean architecture and exceptional user experiences.
+                with a focus on clean architecture and exceptional user
+                experiences.
               </motion.p>
             </div>
 
@@ -110,8 +148,8 @@ const ProgrammerHero = () => {
                 size="lg"
                 className="bg-white text-black hover:bg-white/90 border-0 font-semibold group transition-all"
                 onClick={() => {
-                  const el = document.getElementById('projects');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  const el = document.getElementById("projects");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
                 }}
               >
                 View My Work
@@ -134,7 +172,6 @@ const ProgrammerHero = () => {
 
           {/* ── Right column ── */}
           <div className="flex flex-col gap-4">
-
             {/* Available status card */}
             <motion.div
               initial={{ opacity: 0, x: 24 }}
@@ -145,13 +182,19 @@ const ProgrammerHero = () => {
             >
               <div className="flex items-center gap-2.5 mb-2">
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white/50 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white/70" />
+                  {/* The Ping (Outer Glow) */}
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                  {/* The Solid Dot (Inner) */}
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
                 </span>
-                <span className="text-white font-semibold text-sm">Available for opportunities</span>
+                <span className="text-white font-semibold text-sm">
+                  Available for opportunities
+                </span>
               </div>
+
               <p className="text-white/35 text-xs leading-relaxed pl-5">
-                Open to full-time roles, freelance projects, and interesting collaborations.
+                Open to full-time roles, freelance projects, and interesting
+                collaborations.
               </p>
             </motion.div>
 
@@ -163,7 +206,9 @@ const ProgrammerHero = () => {
               className="flex-1 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-6 flex flex-col"
               style={{ background: "rgba(255,255,255,0.04)" }}
             >
-              <p className="text-white/25 text-xs font-mono uppercase tracking-widest mb-4">Tech Stack</p>
+              <p className="text-white/25 text-xs font-mono uppercase tracking-widest mb-4">
+                Tech Stack
+              </p>
               <div className="flex flex-wrap gap-2 content-start">
                 {skillChips.map((skill, i) => (
                   <motion.span
@@ -189,7 +234,7 @@ const ProgrammerHero = () => {
               style={{ background: "rgba(255,255,255,0.04)" }}
             >
               <div className="text-center">
-                <p className="text-2xl font-bold text-white">3+</p>
+                <p className="text-2xl font-bold text-white">~4</p>
                 <p className="text-white/30 text-xs mt-0.5">Years Exp.</p>
               </div>
               <div className="w-px h-8 bg-white/10" />
@@ -203,7 +248,6 @@ const ProgrammerHero = () => {
                 <p className="text-white/30 text-xs mt-0.5">India</p>
               </div>
             </motion.div>
-
           </div>
         </div>
       </div>

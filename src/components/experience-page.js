@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Briefcase, GraduationCap, ArrowUpRight } from "lucide-react";
+import { Briefcase, ArrowUpRight } from "lucide-react";
 
 const experiences = [
   {
@@ -11,26 +11,22 @@ const experiences = [
     title: "Software Engineer",
     org: "Boeing India Private Limited",
     period: "Aug 2022 – Present",
-    duration: "3+ years",
-    description:
-      "Design and develop backend systems for aerospace-grade applications. Responsible for high-performance data processing pipelines, containerized services, and CI/CD integration across cross-functional teams.",
-    highlights: ["Python", "FastAPI", "Docker", "Linux", "Azure", "REST APIs"],
+    bullets: [
+      "Architected a serverless FastAPI backend using Python and Pydantic to aggregate complex flight-configuration revision histories into hierarchical monthly KPIs.",
+      "Implemented server-side SQL transformations and pandas pivoting to reduce frontend processing by 100%, significantly accelerating analyst workflows.",
+      "Deployed the API using Mangum and AWS Lambda, integrating with AWS Glue/Athena ETL pipelines and Terraform for automated infrastructure management.",
+      "Co-developed a React + Redux SPA to unify fragmented analytics tools, owning state management for SPC and Alerting modules to ensure consistent data flow.",
+      "Engineered text-analytics microservices using Flask to summarize work orders and generate automated alerts, increasing early detection of failure modes.",
+      "Standardized enterprise database connectivity by centralizing SQL utilities and YAML-driven API definitions, reducing production failures and simplifying deployments.",
+      "Designed reliability and lifecycle cost modeling tools using Poisson-Pareto analysis to quantify asset risk and support data-driven maintenance prioritization.",
+      "Engineered and deployed Angular-based features for Navigation Database Services, enhancing user workflows and interface efficiency.",
+      "Developed GUI components using PyQt for ISS Thermal data visualization, achieving a 60% reduction in processing time.",
+      "Maintained 92% code coverage by integrating Pytest for comprehensive testing, ensuring application stability and identifying issues early in development.",
+    ],
+    highlights: ["Python", "FastAPI", "Flask", "React", "Angular", "AWS Lambda", "SQL", "Pandas", "PyQt", "Pytest", "Terraform", "Redux"],
     Icon: Briefcase,
     colSpan: "lg:col-span-3",
   },
-  // {
-  //   id: 2,
-  //   type: "education",
-  //   title: "Bachelor of Engineering",
-  //   org: "MS Ramaiah Institute of Technology",
-  //   period: "2019 – 2022",
-  //   duration: "3 years",
-  //   description:
-  //     "Information Science & Engineering. Strong foundation in data structures, algorithms, software engineering, and systems design.",
-  //   highlights: ["Information Science", "Software Engineering", "Algorithms"],
-  //   Icon: GraduationCap,
-  //   colSpan: "lg:col-span-1",
-  // },
 ];
 
 const BlobBackground = () => (
@@ -55,11 +51,10 @@ const ExperienceCard = ({ exp, index }) => {
       initial={{ opacity: 0, y: 28 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.14, type: "spring", stiffness: 90 }}
-      whileHover={{ y: -5 }}
-      className={`${exp.colSpan} backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.14] rounded-3xl overflow-hidden flex flex-col transition-all duration-300`}
+      className={`${exp.colSpan} backdrop-blur-xl border border-white/[0.08] rounded-3xl overflow-hidden flex flex-col`}
       style={{ background: "rgba(255,255,255,0.04)" }}
     >
-      {/* Card header strip */}
+      {/* Card header */}
       <div className="flex items-start justify-between p-7 pb-5">
         <div className="flex items-center gap-4">
           <div
@@ -69,9 +64,7 @@ const ExperienceCard = ({ exp, index }) => {
             <Icon className="w-5 h-5 text-white/60" />
           </div>
           <div>
-            <p className="text-white/30 text-xs font-mono uppercase tracking-wider mb-0.5">
-              {exp.type === "work" ? "Work Experience" : "Education"}
-            </p>
+            <p className="text-white/30 text-xs font-mono uppercase tracking-wider mb-0.5">Work Experience</p>
             <h3 className="text-lg font-bold text-white leading-tight">{exp.title}</h3>
           </div>
         </div>
@@ -88,15 +81,32 @@ const ExperienceCard = ({ exp, index }) => {
 
       {/* Body */}
       <div className="p-7 flex flex-col flex-1">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-5">
           <ArrowUpRight className="w-3.5 h-3.5 text-white/25 shrink-0" />
           <span className="text-white/55 text-sm font-medium">{exp.org}</span>
         </div>
 
-        <p className="text-white/40 text-sm leading-relaxed flex-1 mb-6">{exp.description}</p>
+        {/* Bullet points — 2 columns on lg */}
+        <ul className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-3 flex-1 mb-6">
+          {exp.bullets.map((point, i) => (
+            <motion.li
+              key={i}
+              initial={{ opacity: 0, x: -8 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.35, delay: 0.2 + i * 0.05 }}
+              className="flex items-start gap-2.5"
+            >
+              <span
+                className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0"
+                style={{ background: "rgba(255,255,255,0.25)" }}
+              />
+              <span className="text-white/45 text-sm leading-relaxed">{point}</span>
+            </motion.li>
+          ))}
+        </ul>
 
         {/* Tech tags */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 pt-5 border-t border-white/[0.06]">
           {exp.highlights.map((tag) => (
             <span
               key={tag}
