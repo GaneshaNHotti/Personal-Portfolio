@@ -2,94 +2,58 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Github,
-  User,
-  Briefcase,
-  Code2,
-  Monitor,
-  Mail,
-  Home,
-  Linkedin,
-  Menu,
-  X,
-} from "lucide-react";
+import { Github, Linkedin, Mail, Menu, X } from "lucide-react";
 
 const navItems = [
-  { name: "home", href: "home", icon: Home },
-  { name: "about", href: "about", icon: User },
-  { name: "experience", href: "experience", icon: Briefcase },
-  { name: "skills", href: "skills", icon: Code2 },
-  { name: "projects", href: "projects", icon: Monitor },
-  { name: "contact", href: "contact", icon: Mail },
+  { name: "Home", href: "home" },
+  { name: "About", href: "about" },
+  { name: "Experience", href: "experience" },
+  { name: "Education", href: "certifications" },
+  { name: "Skills", href: "skills" },
+  { name: "Projects", href: "projects" },
+  { name: "Contact", href: "contact" },
 ];
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [indicatorStyle, setIndicatorStyle] = useState({});
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
   const refs = useRef({});
 
-  // Function to update indicator position
-  const updateIndicatorPosition = (section) => {
-    // Use setTimeout to ensure DOM has updated
+  const updateIndicator = (section) => {
     setTimeout(() => {
       const el = refs.current[section];
-      if (el) {
-        setIndicatorStyle({
-          left: el.offsetLeft,
-          width: el.offsetWidth,
-        });
-      }
+      if (el) setIndicatorStyle({ left: el.offsetLeft, width: el.offsetWidth });
     }, 10);
   };
 
-  // scroll tracking
   useEffect(() => {
     const onScroll = () => {
-      const offset = 100;
-      const scrollPos = window.scrollY + offset;
-
+      const scrollPos = window.scrollY + 100;
       let current = navItems[0].href;
       for (let i = navItems.length - 1; i >= 0; i--) {
         const el = document.getElementById(navItems[i].href);
-        if (el && el.offsetTop <= scrollPos) {
-          current = navItems[i].href;
-          break;
-        }
+        if (el && el.offsetTop <= scrollPos) { current = navItems[i].href; break; }
       }
-      
-      if (current !== activeSection) {
-        setActiveSection(current);
-        updateIndicatorPosition(current);
-      }
+      if (current !== activeSection) { setActiveSection(current); updateIndicator(current); }
     };
-
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, [activeSection]);
 
-  // Initialize indicator position on mount and when refs change
-  useEffect(() => {
-    updateIndicatorPosition(activeSection);
-  }, [activeSection]);
+  useEffect(() => { updateIndicator(activeSection); }, [activeSection]);
 
-  // Also update on window resize to handle responsive changes
   useEffect(() => {
-    const handleResize = () => {
-      updateIndicatorPosition(activeSection);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const onResize = () => updateIndicator(activeSection);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [activeSection]);
 
   const handleNavClick = (href, e) => {
     if (e) e.preventDefault();
     setActiveSection(href);
-    updateIndicatorPosition(href);
-    
+    updateIndicator(href);
     const el = document.getElementById(href);
     history.replaceState(null, "", `#${href}`);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -98,70 +62,64 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-[100]">
-      <div className="w-full backdrop-blur-sm border-b border-emerald-400/40 bg-gray-900/80 shadow-lg shadow-emerald-400/20">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-14 relative">
+      <div className="w-full backdrop-blur-xl border-b border-white/[0.06]" style={{ background: "rgba(0,0,0,0.6)" }}>
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-14">
           {/* Brand */}
-          <div className="font-mono font-bold text-emerald-400 tracking-widest">
+          <a
+            href="#home"
+            onClick={(e) => handleNavClick("home", e)}
+            className="font-bold text-lg text-white tracking-wider select-none"
+          >
             GNH
-          </div>
+          </a>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex gap-8 relative">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <a
-                  key={item.href}
-                  href={`#${item.href}`}
-                  ref={(el) => (refs.current[item.href] = el)}
-                  onClick={(e) => handleNavClick(item.href, e)}
-                  className={`relative flex items-center gap-1 font-mono text-sm transition-colors ${
-                    activeSection === item.href
-                      ? "text-emerald-400"
-                      : "text-gray-300 hover:text-emerald-300"
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>[ {item.name.toLowerCase()} ]</span>
-                </a>
-              );
-            })}
-
-            {/* single underline indicator */}
+          {/* Desktop nav — pill container with sliding active indicator */}
+          <div
+            className="hidden md:flex items-center gap-0.5 relative p-1 rounded-full border border-white/[0.08]"
+            style={{ background: "rgba(255,255,255,0.04)" }}
+          >
             <motion.div
-              className="absolute -bottom-1 h-0.5 bg-emerald-400 rounded-full"
-              style={indicatorStyle}
+              className="absolute h-8 rounded-full"
+              style={{ background: "rgba(255,255,255,0.10)" }}
               animate={indicatorStyle}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              transition={{ type: "spring", stiffness: 400, damping: 35 }}
             />
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={`#${item.href}`}
+                ref={(el) => (refs.current[item.href] = el)}
+                onClick={(e) => handleNavClick(item.href, e)}
+                className={`relative z-10 px-4 py-1.5 text-sm font-medium rounded-full transition-colors ${
+                  activeSection === item.href ? "text-white" : "text-white/40 hover:text-white"
+                }`}
+              >
+                {item.name}
+              </a>
+            ))}
           </div>
 
-          {/* Right: socials + mobile toggle */}
+          {/* Socials + mobile toggle */}
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex gap-4">
-              <a
-                href="https://github.com/GaneshaNHotti"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Github className="w-5 h-5 text-gray-300 hover:text-emerald-400 transition-colors" />
+            <div className="hidden md:flex items-center gap-3">
+              <a href="https://github.com/GaneshaNHotti" target="_blank" rel="noreferrer"
+                className="text-white/30 hover:text-white transition-colors">
+                <Github className="w-5 h-5" />
               </a>
-              <a
-                href="https://www.linkedin.com/in/ganeshanhotti/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Linkedin className="w-5 h-5 text-gray-300 hover:text-emerald-400 transition-colors" />
+              <a href="https://www.linkedin.com/in/ganeshanhotti/" target="_blank" rel="noreferrer"
+                className="text-white/30 hover:text-white transition-colors">
+                <Linkedin className="w-5 h-5" />
               </a>
-              <a href="mailto:ganeshahotti5112000@gmail.com">
-                <Mail className="w-5 h-5 text-gray-300 hover:text-emerald-400 transition-colors" />
+              <a href="mailto:ganeshahotti5112000@gmail.com"
+                className="text-white/30 hover:text-white transition-colors">
+                <Mail className="w-5 h-5" />
               </a>
             </div>
             <button
-              className="md:hidden text-gray-300 hover:text-emerald-400 transition-colors"
+              className="md:hidden text-white/40 hover:text-white transition-colors"
               onClick={() => setMobileOpen((s) => !s)}
             >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -170,29 +128,43 @@ export default function Navbar() {
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden bg-gray-900/95 border-t border-emerald-400/40 px-6 py-4 space-y-4"
+              className="md:hidden border-t border-white/[0.06] overflow-hidden"
+              style={{ background: "rgba(0,0,0,0.95)" }}
             >
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                return (
+              <div className="px-6 py-4 flex flex-col gap-1">
+                {navItems.map((item) => (
                   <button
                     key={item.href}
                     onClick={() => handleNavClick(item.href)}
-                    className={`w-full flex items-center gap-2 font-mono text-sm ${
+                    className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                       activeSection === item.href
-                        ? "text-emerald-400"
-                        : "text-gray-300 hover:text-emerald-300"
+                        ? "text-white"
+                        : "text-white/40 hover:text-white hover:bg-white/[0.04]"
                     }`}
+                    style={activeSection === item.href ? { background: "rgba(255,255,255,0.08)" } : {}}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span>{item.name.toLowerCase()}</span>
+                    {item.name}
                   </button>
-                );
-              })}
+                ))}
+                <div className="flex gap-4 pt-3 pl-3 border-t border-white/[0.06] mt-2">
+                  <a href="https://github.com/GaneshaNHotti" target="_blank" rel="noreferrer"
+                    className="text-white/30 hover:text-white transition-colors">
+                    <Github className="w-5 h-5" />
+                  </a>
+                  <a href="https://www.linkedin.com/in/ganeshanhotti/" target="_blank" rel="noreferrer"
+                    className="text-white/30 hover:text-white transition-colors">
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                  <a href="mailto:ganeshahotti5112000@gmail.com"
+                    className="text-white/30 hover:text-white transition-colors">
+                    <Mail className="w-5 h-5" />
+                  </a>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

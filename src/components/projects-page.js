@@ -1,382 +1,191 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, Code, Zap, Users, BarChart3, MessagesSquare } from "lucide-react";
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
-
-
-const BackgroundGradient = ({ children, className = "" }) => {
-  return (
-    <div
-      className={`relative group ${className}`}
-    >
-      <div className="relative bg-gray-900 rounded-xl border border-gray-700">
-        {children}
-      </div>
-    </div>
-  );
-};
-
-const MatrixRain = () => {
-  const [drops, setDrops] = useState([]);
-
-  useEffect(() => {
-    const newDrops = Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      speed: 0.5 + Math.random() * 1,
-      opacity: 0.1 + Math.random() * 0.3
-    }));
-    setDrops(newDrops);
-  }, []);
-
-  return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
-      {drops.map((drop) => (
-        <motion.div
-          key={drop.id}
-          className="absolute text-green-400 font-mono text-xs"
-          style={{ left: `${drop.x}%` }}
-          animate={{
-            y: ['0vh', '100vh'],
-            opacity: [drop.opacity, 0]
-          }}
-          transition={{
-            duration: 20 / drop.speed,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        >
-          {Array.from({ length: 10 }, (_, i) => (
-            <div key={i} className="mb-1">
-              {Math.random() > 0.5 ? '1' : '0'}
-            </div>
-          ))}
-        </motion.div>
-      ))}
-    </div>
-  );
-};
-
-const MatrixBackground = () => {
-  const [matrixItems, setMatrixItems] = useState([]);
-
-  useEffect(() => {
-    const generated = Array.from({ length: 20 }).map(() => ({
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      delay: Math.random() * 3,
-      binary: Math.random().toString(2).substr(2, 8),
-    }));
-    setMatrixItems(generated);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden opacity-5 z-0">
-      {matrixItems.map((item, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-green-400 font-mono text-xs"
-          style={{
-            left: item.left,
-            top: item.top,
-          }}
-          animate={{
-            y: [0, -100],
-            opacity: [0, 1, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            delay: item.delay,
-          }}
-        >
-          {item.binary}
-        </motion.div>
-      ))}
-    </div>
-  );
-};
-
-
+import { ExternalLink, Github, Lock, ArrowUpRight, MessagesSquare, Server } from "lucide-react";
 
 const projects = [
   {
     id: 1,
-    title: "Real Time Chat Application",
-    description: "Built a real-time chat application using FastAPI, React, and Socket.io. Implemented user authentication with JWT and styled the frontend with Tailwind CSS.",
-    image: "/api/placeholder/400/250",
-    tech: ["Python", "FastAPI", "React", "Socket.io", "Tailwind CSS", "Docker"],
-    liveUrl: "#",
-    githubUrl: "https://github.com/GaneshaNHotti/Chat-App",
-    icon: MessagesSquare,
-    gradient: "from-emerald-500 to-blue-500"
+    type: "professional",
+    title: "Aerospace Backend Systems",
+    org: "Boeing India Private Limited",
+    description:
+      "Design and development of backend services supporting aerospace-grade applications. Built high-performance data processing pipelines, REST APIs, and containerized microservices for real-time data ingestion and processing.",
+    tech: ["Python", "FastAPI", "Docker", "Linux", "Azure", "REST APIs"],
+    liveUrl: null,
+    githubUrl: null,
+    Icon: Server,
+    note: "Proprietary — code is confidential",
+    colSpan: "lg:col-span-2",
+    featured: true,
   },
   {
     id: 2,
-    title: "TBD",
-    description: "TBD",
-    image: "/api/placeholder/400/250",
-    tech: ["TBD"],
+    type: "personal",
+    title: "Real Time Chat App",
+    org: "Personal Project",
+    description:
+      "Real-time chat application with user authentication (JWT), live messaging via Socket.io, and a responsive Tailwind CSS frontend. Containerized with Docker.",
+    tech: ["Python", "FastAPI", "React", "Socket.io", "Tailwind CSS", "Docker"],
     liveUrl: "#",
-    githubUrl: "#",
-    icon: Users,
-    gradient: "from-blue-500 to-purple-500"
+    githubUrl: "https://github.com/GaneshaNHotti/Chat-App",
+    Icon: MessagesSquare,
+    note: null,
+    colSpan: "lg:col-span-1",
+    featured: false,
   },
-  {
-    id: 3,
-    title: "TBD",
-    description: "TBD",
-    image: "/api/placeholder/400/250",
-    tech: ["TBD"],
-    liveUrl: "#",
-    githubUrl: "#",
-    icon: BarChart3,
-    gradient: "from-purple-500 to-blue-500"
-  }
 ];
 
-const ProjectsTitle = () => (
-  <div className="text-center mb-10">
-    <h2 className="text-4xl lg:text-6xl font-bold text-white font-mono mb-4">
-      <span className="text-white">build</span>
-      <span className="text-blue-400">.Showcase</span>
-      <span className="text-purple-400">()</span>
-    </h2>
-    <p className="mt-2 text-green-400 font-mono text-sm lg:text-base tracking-wide">
-     {"// Real-world builds. Code that speaks louder than words."}
-    </p>
+const BlobBackground = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <motion.div
+      className="absolute w-[600px] h-[600px] rounded-full"
+      style={{ background: "rgba(255,255,255,0.03)", filter: "blur(160px)", top: "10%", left: "-5%" }}
+      animate={{ x: [0, 60, 0], y: [0, -50, 0], scale: [1, 1.15, 1] }}
+      transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <motion.div
+      className="absolute w-[500px] h-[500px] rounded-full"
+      style={{ background: "rgba(255,255,255,0.02)", filter: "blur(130px)", bottom: "10%", right: "-5%" }}
+      animate={{ x: [0, -40, 0], y: [0, 40, 0], scale: [1, 1.1, 1] }}
+      transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 7 }}
+    />
   </div>
 );
 
-
-export const AnimatedProjectsGrid = () => {
-  const [hoveredProject, setHoveredProject] = useState(null);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const cardVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 50,
-      scale: 0.9
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        damping: 20,
-        stiffness: 100,
-        duration: 0.8
-      }
-    }
-  };
+const ProjectCard = ({ project, index }) => {
+  const [hovered, setHovered] = useState(false);
+  const { Icon } = project;
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 py-20 px-4 relative overflow-hidden">
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-gray-900/60 to-black/80" />
-      {/* Floating Elements */}
-      <motion.div
-      animate={{ y: [-10, 10, -10] }}
-      transition={{ duration: 4, repeat: Infinity }}
-      className="absolute top-20 left-20 text-green-400">
-        <Code size={24} className="opacity-40" />
-        </motion.div>
-        <motion.div
-        animate={{ y: [10, -10, 10] }}
-        transition={{ duration: 3, repeat: Infinity }}
-        className="absolute bottom-32 right-20 text-blue-400">
-          <Zap size={20} className="opacity-40" />
-          </motion.div>
-      <MatrixBackground />
-      <MatrixRain />
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <motion.h2 
-            className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 mb-6"
-            animate={{ 
-              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-            }}
-            transition={{ 
-              duration: 5, 
-              repeat: Infinity, 
-              ease: "linear"
-            }}
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.12 }}
+      whileHover={{ y: -5 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className={`${project.colSpan} backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.14] rounded-3xl overflow-hidden flex flex-col transition-all duration-300`}
+      style={{
+        background: "rgba(255,255,255,0.04)",
+        boxShadow: hovered ? "0 0 50px rgba(255,255,255,0.05)" : "none",
+      }}
+    >
+      {/* Card header */}
+      <div className="flex items-start justify-between p-7 pb-5">
+        <div className="flex items-center gap-4">
+          <div
+            className="w-12 h-12 rounded-2xl border border-white/12 flex items-center justify-center shrink-0"
+            style={{ background: "rgba(255,255,255,0.08)" }}
           >
-            <ProjectsTitle />
-          </motion.h2>
-        </motion.div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8"
+            <Icon className="w-5 h-5 text-white/60" />
+          </div>
+          <div>
+            <p className="text-white/30 text-xs font-mono uppercase tracking-wider mb-0.5">
+              {project.type === "professional" ? "Professional" : "Personal"}
+            </p>
+            <h3 className="text-lg font-bold text-white leading-tight">{project.title}</h3>
+          </div>
+        </div>
+        <div
+          className="text-white/30 text-xs font-mono px-3 py-1.5 rounded-full border border-white/[0.07] shrink-0"
+          style={{ background: "rgba(255,255,255,0.03)" }}
         >
-          {projects.map((project) => {
-            const IconComponent = project.icon;
-            return (
-              <motion.div
-                key={project.id}
-                variants={cardVariants}
-                className="h-full min-h-[600px]"
-                onMouseEnter={() => setHoveredProject(project.id)}
-                onMouseLeave={() => setHoveredProject(null)}
-              >
-                <BackgroundGradient className="h-full">
-                  <motion.div
-                    className="p-6 h-full flex flex-col overflow-hidden"
-                    whileHover={{ 
-                      y: -5,
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                  >
-                    {/* Project Image */}
-                    <div className="relative mb-6 overflow-hidden rounded-lg group flex-shrink-0">
-                      <motion.div
-                        className="relative h-48 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <motion.div
-                          className={`w-16 h-16 rounded-full bg-gradient-to-r ${project.gradient} flex items-center justify-center`}
-                          whileHover={{ 
-                            scale: 1.2, 
-                            rotate: 360 
-                          }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          <IconComponent className="w-8 h-8 text-white" />
-                        </motion.div>
-                        
-                        {/* Animated overlay */}
-                        <motion.div
-                          className={`absolute inset-0 bg-gradient-to-r ${project.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-                        />
-                      </motion.div>
-                      
-                      {/* Hover glow effect */}
-                      <motion.div
-                        className={`absolute -inset-0.5 bg-gradient-to-r ${project.gradient} rounded-lg blur opacity-0 transition-opacity duration-300`}
-                        animate={{ 
-                          opacity: hoveredProject === project.id ? 0.3 : 0 
-                        }}
-                      />
-                    </div>
+          {project.org}
+        </div>
+      </div>
 
-                    {/* Content */}
-                    <div className="flex-grow flex flex-col min-h-0">
-                      <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors duration-300 flex-shrink-0">
-                        {project.title}
-                      </h3>
-                      <p className="text-gray-300 mb-6 leading-relaxed flex-shrink-0">
-                        {project.description}
-                      </p>
+      <div className="h-px mx-7" style={{ background: "rgba(255,255,255,0.06)" }} />
 
-                      {/* Tech Stack */}
-                      <div className="mb-6 flex-grow flex flex-col">
-                        <h4 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider flex-shrink-0">
-                          Tech Stack
-                        </h4>
-                        <div className="flex flex-wrap gap-2 content-start">
-                          {project.tech.map((tech) => (
-                            <motion.div
-                              key={tech}
-                              whileHover={{ 
-                                scale: 1.05,
-                                y: -2
-                              }}
-                              transition={{ duration: 0.2 }}
-                            >
-                              <Badge 
-                                variant="secondary"
-                                className="bg-gray-800 text-emerald-400 border border-emerald-500/20 hover:border-emerald-500/40 hover:bg-emerald-500/10 transition-all duration-300 font-mono text-xs whitespace-nowrap"
-                              >
-                                {tech}
-                              </Badge>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+      {/* Body */}
+      <div className="p-7 flex flex-col flex-1">
+        <p className="text-white/40 text-sm leading-relaxed flex-1 mb-6">{project.description}</p>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-3 mt-auto flex-shrink-0">
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="flex-1"
-                      >
-                        <Button 
-                          className="w-full bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white border-0 group"
-                        >
-                          <ExternalLink className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-200" />
-                          Live Demo
-                        </Button>
-                      </motion.div>
-                      
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        <Button 
-                          variant="outline"
-                          className="border-gray-600 text-gray-300 hover:text-white hover:border-purple-500 hover:bg-purple-500/10 group"
-                          onClick={() => window.open(project.githubUrl, "_blank")}
-                        >
-                          <Github className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                        </Button>
-                      </motion.div>
-                    </div>
-                  </motion.div>
-                </BackgroundGradient>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
-          className="text-center mt-16"
-        >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button 
-              size="lg"
-              onClick={() => window.open("https://github.com/GaneshaNHotti", "_blank")}
-              className="bg-gradient-to-r from-purple-600 to-emerald-600 hover:from-purple-500 hover:to-emerald-500 text-white font-semibold px-8 py-3 group"
+        <div className="flex flex-wrap gap-2 mb-6">
+          {project.tech.map((t) => (
+            <span
+              key={t}
+              className="px-3 py-1 rounded-xl text-xs border border-white/[0.08] text-white/40 font-mono"
+              style={{ background: "rgba(255,255,255,0.03)" }}
             >
-              <Zap className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" />
-              View All Projects
-            </Button  >
-          </motion.div>
+              {t}
+            </span>
+          ))}
+        </div>
+
+        {/* Action row */}
+        {project.note ? (
+          <div className="flex items-center gap-2 text-white/25 text-xs">
+            <Lock className="w-3.5 h-3.5 shrink-0" />
+            <span>{project.note}</span>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <button
+              className="flex-1 flex items-center justify-center gap-1.5 h-9 rounded-xl bg-white text-black text-sm font-semibold hover:bg-white/90 transition-colors"
+              onClick={() => project.liveUrl && project.liveUrl !== "#" && window.open(project.liveUrl, "_blank")}
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              Live Demo
+            </button>
+            <button
+              className="flex items-center justify-center h-9 w-10 rounded-xl border border-white/10 text-white/40 hover:text-white hover:bg-white/[0.06] transition-all"
+              onClick={() => project.githubUrl && project.githubUrl !== "#" && window.open(project.githubUrl, "_blank")}
+            >
+              <Github className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+const AnimatedProjectsGrid = () => {
+  return (
+    <section className="min-h-screen bg-[#080808] px-4 md:px-6 py-24 relative overflow-hidden flex items-center">
+      <BlobBackground />
+
+      <div className="max-w-7xl w-full mx-auto relative z-10">
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 flex items-baseline justify-between border-b border-white/[0.06] pb-5"
+        >
+          <h2 className="text-3xl lg:text-5xl font-bold text-white">Projects</h2>
+          <span className="text-white/25 font-mono text-xs uppercase tracking-widest">Portfolio</span>
         </motion.div>
+
+        {/* Bento: Boeing (col-2) + Chat App (col-1) */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {projects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
+
+        {/* GitHub CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="mt-4"
+        >
+          <button
+            onClick={() => window.open("https://github.com/GaneshaNHotti", "_blank")}
+            className="w-full flex items-center justify-center gap-2 backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.15] rounded-3xl py-5 text-white/40 hover:text-white/70 text-sm font-medium transition-all duration-300 group"
+            style={{ background: "rgba(255,255,255,0.04)" }}
+          >
+            View all projects on GitHub
+            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </button>
+        </motion.div>
+
       </div>
     </section>
   );

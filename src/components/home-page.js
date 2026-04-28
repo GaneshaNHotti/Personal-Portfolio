@@ -3,326 +3,210 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from './ui/button';
-import { Download, ArrowRight, Terminal, Code, Zap } from 'lucide-react';
+import { Download, ArrowRight } from 'lucide-react';
 
-const BackgroundBoxes = () => {
-  const [boxes, setBoxes] = useState([]);
+const BlobBackground = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <motion.div
+      className="absolute w-[700px] h-[700px] rounded-full"
+      style={{ background: "rgba(255,255,255,0.03)", filter: 'blur(180px)', top: '-20%', left: '-10%' }}
+      animate={{ x: [0, 80, 0], y: [0, 60, 0], scale: [1, 1.15, 1] }}
+      transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+    />
+    <motion.div
+      className="absolute w-[500px] h-[500px] rounded-full"
+      style={{ background: "rgba(255,255,255,0.02)", filter: 'blur(140px)', bottom: '-10%', right: '-5%' }}
+      animate={{ x: [0, -50, 0], y: [0, -40, 0], scale: [1, 1.1, 1] }}
+      transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 8 }}
+    />
+  </div>
+);
 
-  useEffect(() => {
-    const generated = Array.from({ length: 50 }).map(() => ({
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      width: `${20 + Math.random() * 40}px`,
-      height: `${20 + Math.random() * 40}px`,
-      duration: 2 + Math.random() * 2,
-      delay: Math.random() * 2,
-    }));
-    setBoxes(generated);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black">
-        {boxes.map((box, i) => (
-          <motion.div
-            key={i}
-            className="absolute border border-green-500/20 rounded"
-            style={{
-              left: box.left,
-              top: box.top,
-              width: box.width,
-              height: box.height,
-            }}
-            animate={{
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: box.duration,
-              repeat: Infinity,
-              delay: box.delay,
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const TypingEffect = ({ text, delay = 0, className = "" }) => {
+const TypingEffect = ({ text }) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (currentIndex < text.length) {
-        setDisplayText(prev => prev + text[currentIndex]);
-        setCurrentIndex(currentIndex + 1);
+        setDisplayText((prev) => prev + text[currentIndex]);
+        setCurrentIndex((i) => i + 1);
       }
-    }, 50 + delay);
-
+    }, 65);
     return () => clearTimeout(timeout);
-  }, [currentIndex, text, delay]);
+  }, [currentIndex, text]);
 
   return (
-    <span className={`tracking-wide ${className}`}>
-      <span style={{ fontFamily: 'monospace' }}>{displayText}</span>
+    <>
+      {displayText}
       <motion.span
         animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.8, repeat: Infinity }}
-        className="text-green-400"
-      >
-        |
-      </motion.span>
-    </span>
+        transition={{ duration: 0.7, repeat: Infinity }}
+        className="inline-block w-[3px] h-[0.8em] bg-white/50 ml-1 align-middle"
+      />
+    </>
   );
 };
 
+const skillChips = ['Python', 'Angular', 'FastAPI', 'TypeScript', 'Docker', 'MySQL', 'Azure', 'Git'];
 
-
-const CodeTerminal = () => {
-  const code_lines = [
-    "# Building the future, one line at a time",
-    "developer = {",
-    '    "name": "Ganesha N Hotti",',
-    '    "role": "Software Engineer",',
-    '    "languages": ["JavaScript", "Python", "C# Programming"],',
-    '    "frameworks": ["Angular", "FASTApi", "FlaskApi"],',
-    '    "passion": "Turning futuristic tech into everyday solutions",',
-    '    "status": "Available for hire" ✨',
-    "}",
-    "",
-    'developer.code();',
-    '> Transforming ideas into reality...',
-    '> Building scalable applications...',
-    '> Innovating with AI integration...',
-    '✅ Ready to collaborate!',
-]
-  const codeLines = code_lines.map(line => line.trim());
-  const [visibleLines, setVisibleLines] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVisibleLines(prev => {
-        if (prev < codeLines.length) {
-          return prev + 1;
-        }
-        return 0; // Reset animation
-      });
-    }, 300);
-
-    return () => clearInterval(interval);
-  }, [codeLines.length]);
-
-  const getLineColor = (line, index) => {
-    if (line.startsWith('//')) return 'text-gray-500';
-    if (line.includes('const') || line.includes('name:') || line.includes('role:')) return 'text-blue-400';
-    if (line.includes('"')) return 'text-yellow-400';
-    if (line.includes('✨') || line.includes('✅')) return 'text-purple-400';
-    if (line.startsWith('>')) return 'text-green-400';
-    if (line.includes('{') || line.includes('}') || line.includes(';')) return 'text-white';
-    return 'text-gray-300';
-  };
-
+const ProgrammerHero = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.8, delay: 0.5 }}
-      className="bg-gray-900/90 backdrop-blur border border-green-500/30 rounded-lg p-6 font-mono text-sm shadow-2xl"
-    >
-      {/* Terminal Header */}
-      <div className="flex items-center mb-4 pb-2 border-b border-gray-700">
-        <div className="flex space-x-2">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-        </div>
-        <div className="flex items-center ml-4 text-gray-400">
-          <Terminal size={16} className="mr-2" />
-          <span>portfolio.py</span>
-        </div>
-      </div>
+    <section className="min-h-screen bg-[#080808] px-4 md:px-6 flex items-center relative overflow-hidden">
+      <BlobBackground />
 
-      {/* Code Content */}
-      <div className="space-y-1">
-        {codeLines.slice(0, visibleLines).map((line, index) => (
+      <div className="relative z-10 w-full max-w-7xl mx-auto pt-16 pb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+          {/* ── Main hero card ── */}
           <motion.div
-            key={index}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3 }}
-            className={`${getLineColor(line, index)} leading-relaxed`}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65 }}
+            className="lg:col-span-2 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-10 lg:p-14 flex flex-col justify-between"
+            style={{ background: "rgba(255,255,255,0.04)", minHeight: "480px" }}
           >
-            <span className="text-gray-600 mr-3 select-none">
-              {(index + 1).toString().padStart(2, '0')}
-            </span>
-            {line}
-            {index === visibleLines - 1 && (
-              <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.8, repeat: Infinity }}
-                className="text-green-400 ml-1"
+            <div className="space-y-5">
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="text-white/35 font-mono text-sm tracking-widest uppercase"
               >
-                |
-              </motion.span>
-            )}
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
-  );
-};
+                Hi, I&apos;m
+              </motion.p>
 
-export const ProgrammerHero = () => {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-      <BackgroundBoxes />
-      
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-gray-900/60 to-black/80" />
-      
-      {/* Floating Elements */}
-      <motion.div
-        animate={{ y: [-10, 10, -10] }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute top-20 left-20 text-green-400"
-      >
-        <Code size={24} className="opacity-40" />
-      </motion.div>
-      
-      <motion.div
-        animate={{ y: [10, -10, 10] }}
-        transition={{ duration: 3, repeat: Infinity }}
-        className="absolute bottom-32 right-20 text-blue-400"
-      >
-        <Zap size={20} className="opacity-40" />
-      </motion.div>
-
-      {/* Main Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          
-          {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
-            {/* Greeting */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-green-400 font-mono text-lg"
-            >
-              $ whoami
-            </motion.div>
-            {/* Main Heading */}
-            <div className="space-y-4">
-            <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight">
-                Hi, I&apos;m{' '}
-                <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-                  <TypingEffect text="Ganesha N Hotti" delay={20} />
-                </span>
+              <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.08] tracking-tight">
+                <TypingEffect text="Ganesha N Hotti" />
               </h1>
+
               <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.5 }}
-                className="text-2xl lg:text-3xl text-blue-400 font-semibold"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.6 }}
+                className="text-xl lg:text-2xl text-white/40 font-medium"
               >
                 Software Engineer
               </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.9 }}
+                className="text-white/35 leading-relaxed text-base lg:text-lg max-w-xl"
+              >
+                I build robust backend systems and innovative web applications
+                with a focus on clean architecture and exceptional user experiences.
+              </motion.p>
             </div>
 
-            {/* Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2 }}
-              className="text-lg lg:text-xl text-gray-300 leading-relaxed max-w-xl"
-            >
-              I build robust backend systems and innovative web applications with a focus on clean, 
-              efficient code and exceptional user experiences. — one line of code at a time.
-            </motion.p>
-
-            {/* Skills Tags */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2.3 }}
-              className="flex flex-wrap gap-3"
-            >
-              {['Python', 'Angular', 'JavaScript', 'Git', 'Azure', 'MySQL'].map((skill, index) => (
-                <span
-                  key={skill}
-                  className="px-3 py-1 bg-gray-800/50 border border-green-500/30 rounded-full text-green-400 text-sm font-mono"
-                >
-                  {skill}
-                </span>
-              ))}
-            </motion.div>
-
-            {/* Action Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2.6 }}
-              className="flex flex-col sm:flex-row gap-4"
+              transition={{ delay: 2.1 }}
+              className="flex flex-col sm:flex-row gap-3 pt-10"
             >
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-400 hover:to-blue-500 text-white border-0 group transition-all duration-300 transform hover:scale-105"
+                className="bg-white text-black hover:bg-white/90 border-0 font-semibold group transition-all"
+                onClick={() => {
+                  const el = document.getElementById('projects');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
                 View My Work
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-              
               <Button
                 variant="outline"
                 size="lg"
-                className="border-green-500/50 text-green-400 hover:bg-green-500/10 hover:border-green-400 group transition-all duration-300"
+                className="border-white/15 text-white hover:bg-white/[0.06] hover:border-white/25 group transition-all"
+                style={{ background: "rgba(255,255,255,0.04)" }}
                 asChild
               >
                 <a href="/Ganesha_N_Hotti.pdf" download>
                   Download Resume
-                  <Download className="ml-2 h-5 w-5 group-hover:translate-y-0.5 transition-transform" />
+                  <Download className="ml-2 h-4 w-4 group-hover:translate-y-0.5 transition-transform" />
                 </a>
               </Button>
             </motion.div>
           </motion.div>
 
-          {/* Right Content - Terminal */}
-          <div className="relative">
-            <CodeTerminal />
-            
-            {/* Glow Effect */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-2xl blur-xl opacity-60" />
+          {/* ── Right column ── */}
+          <div className="flex flex-col gap-4">
+
+            {/* Available status card */}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.25 }}
+              className="backdrop-blur-xl border border-white/[0.08] rounded-3xl p-6"
+              style={{ background: "rgba(255,255,255,0.04)" }}
+            >
+              <div className="flex items-center gap-2.5 mb-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white/50 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white/70" />
+                </span>
+                <span className="text-white font-semibold text-sm">Available for opportunities</span>
+              </div>
+              <p className="text-white/35 text-xs leading-relaxed pl-5">
+                Open to full-time roles, freelance projects, and interesting collaborations.
+              </p>
+            </motion.div>
+
+            {/* Skills chip cloud */}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex-1 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-6 flex flex-col"
+              style={{ background: "rgba(255,255,255,0.04)" }}
+            >
+              <p className="text-white/25 text-xs font-mono uppercase tracking-widest mb-4">Tech Stack</p>
+              <div className="flex flex-wrap gap-2 content-start">
+                {skillChips.map((skill, i) => (
+                  <motion.span
+                    key={skill}
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 + i * 0.05 }}
+                    className="px-3 py-1.5 rounded-xl text-sm border border-white/10 text-white/55 font-medium"
+                    style={{ background: "rgba(255,255,255,0.05)" }}
+                  >
+                    {skill}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Quick stat card */}
+            <motion.div
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.55 }}
+              className="backdrop-blur-xl border border-white/[0.08] rounded-3xl px-6 py-5 flex items-center justify-between"
+              style={{ background: "rgba(255,255,255,0.04)" }}
+            >
+              <div className="text-center">
+                <p className="text-2xl font-bold text-white">3+</p>
+                <p className="text-white/30 text-xs mt-0.5">Years Exp.</p>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div className="text-center">
+                <p className="text-sm font-semibold text-white/70">Boeing</p>
+                <p className="text-white/30 text-xs mt-0.5">Current</p>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div className="text-center">
+                <p className="text-sm font-semibold text-white/70">Bangalore</p>
+                <p className="text-white/30 text-xs mt-0.5">India</p>
+              </div>
+            </motion.div>
+
           </div>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-green-400/50 rounded-full flex justify-center"
-        >
-          <motion.div
-            animate={{ y: [0, 16, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-1 h-3 bg-green-400 rounded-full mt-2"
-          />
-        </motion.div>
-      </motion.div>
     </section>
   );
 };

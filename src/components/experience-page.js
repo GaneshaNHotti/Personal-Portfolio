@@ -1,357 +1,146 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { Code, Code2, GraduationCap, Zap } from 'lucide-react';
-
-/**
- * @typedef {Object} ExperienceItem
- * @property {number} id
- * @property {string} title
- * @property {string} company
- * @property {string} period
- * @property {string} description
- * @property {React.ReactNode} icon
- * @property {'left' | 'right'} side
- */
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Briefcase, GraduationCap, ArrowUpRight } from "lucide-react";
 
 const experiences = [
   {
     id: 1,
+    type: "work",
     title: "Software Engineer",
-    company: "Boeing India Private Limited",
-    period: "2022 - Present",
-    description: "Backend development for aerospace systems and applications. Focused on high-performance computing and real-time data processing.",
-    icon: <Code2 className="w-6 h-6" />,
-    side: 'right'
+    org: "Boeing India Private Limited",
+    period: "Aug 2022 – Present",
+    duration: "3+ years",
+    description:
+      "Design and develop backend systems for aerospace-grade applications. Responsible for high-performance data processing pipelines, containerized services, and CI/CD integration across cross-functional teams.",
+    highlights: ["Python", "FastAPI", "Docker", "Linux", "Azure", "REST APIs"],
+    Icon: Briefcase,
+    colSpan: "lg:col-span-3",
   },
-  {
-    id: 2,
-    title: "Bachelor of Engineering",
-    company: "MS Ramaiah Institute of Technology",
-    period: "2019 - 2022",
-    description: "Graduated with a degree in Information Science & Engineering, specializing in software development and systems engineering.",
-    icon: <GraduationCap className="w-6 h-6" />,
-    side: 'left'
-  }
+  // {
+  //   id: 2,
+  //   type: "education",
+  //   title: "Bachelor of Engineering",
+  //   org: "MS Ramaiah Institute of Technology",
+  //   period: "2019 – 2022",
+  //   duration: "3 years",
+  //   description:
+  //     "Information Science & Engineering. Strong foundation in data structures, algorithms, software engineering, and systems design.",
+  //   highlights: ["Information Science", "Software Engineering", "Algorithms"],
+  //   Icon: GraduationCap,
+  //   colSpan: "lg:col-span-1",
+  // },
 ];
 
-const MatrixBackground = () => {
-  const [matrixItems, setMatrixItems] = useState([]);
+const BlobBackground = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <motion.div
+      className="absolute w-[700px] h-[700px] rounded-full"
+      style={{ background: "rgba(255,255,255,0.025)", filter: "blur(180px)", top: "10%", left: "50%", x: "-50%" }}
+      animate={{ scale: [1, 1.15, 1] }}
+      transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+    />
+  </div>
+);
 
-  useEffect(() => {
-    const generated = Array.from({ length: 20 }).map(() => ({
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      delay: Math.random() * 3,
-      binary: Math.random().toString(2).substr(2, 8),
-    }));
-    setMatrixItems(generated);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden opacity-5 z-0">
-      {matrixItems.map((item, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-green-400 font-mono text-xs"
-          style={{
-            left: item.left,
-            top: item.top,
-          }}
-          animate={{
-            y: [0, -100],
-            opacity: [0, 1, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            delay: item.delay,
-          }}
-        >
-          {item.binary}
-        </motion.div>
-      ))}
-    </div>
-  );
-};
-
-const TimelineCard = ({ experience, index }) => {
-  const cardRef = useRef(null);
-  const isInView = useInView(cardRef, { once: true, margin: "-100px" });
+const ExperienceCard = ({ exp, index }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const { Icon } = exp;
 
   return (
     <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, x: experience.side === 'left' ? -100 : 100 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{
-        duration: 0.8,
-        delay: index * 0.2,
-        type: "spring",
-        stiffness: 100
-      }}
-      className={`flex items-center w-full ${
-        experience.side === 'left' ? 'justify-start pr-8 md:pr-12' : 'justify-end pl-8 md:pl-12'
-      } mb-16`}
+      ref={ref}
+      initial={{ opacity: 0, y: 28 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.14, type: "spring", stiffness: 90 }}
+      whileHover={{ y: -5 }}
+      className={`${exp.colSpan} backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.14] rounded-3xl overflow-hidden flex flex-col transition-all duration-300`}
+      style={{ background: "rgba(255,255,255,0.04)" }}
     >
-      <div className={`w-full max-w-md ${experience.side === 'left' ? 'text-right' : 'text-left'}`}>
-        <motion.div
-          whileHover={{ scale: 1.05, rotateY: 5 }}
-          className="relative bg-gray-900/80 backdrop-blur-sm border border-gray-700 rounded-lg p-6 shadow-2xl
-                     hover:border-green-400/50 transition-all duration-300 group"
-          style={{
-            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9))',
-            boxShadow: '0 0 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-          }}
-        >
-          {/* Glowing border effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-green-400/0 via-blue-500/0 to-purple-600/0 
-                         group-hover:from-green-400/20 group-hover:via-blue-500/20 group-hover:to-purple-600/20 
-                         rounded-lg transition-all duration-300" />
-          
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 bg-green-400/10 rounded-lg border border-green-400/30">
-                {experience.icon}
-              </div>
-              <div className="font-mono text-xs text-green-400 bg-gray-800/50 px-2 py-1 rounded border border-green-400/30">
-                {experience.period}
-              </div>
-            </div>
-            
-            <h3 className="text-xl font-bold text-white mb-1 group-hover:text-green-300 transition-colors">
-              {experience.title}
-            </h3>
-            
-            <h4 className="text-lg text-blue-400 mb-3 font-semibold">
-              {experience.company}
-            </h4>
-            
-            <p className="text-gray-300 leading-relaxed">
-              {experience.description}
-            </p>
-            
-            {/* Terminal cursor */}
-            <motion.div
-              animate={{ opacity: [0, 1, 0] }}
-              transition={{ duration: 1, repeat: Infinity }}
-              className="inline-block w-2 h-5 bg-green-400 ml-1 mt-2"
-            />
-          </div>
-
-          {/* Floating particles */}
-          {Array.from({ length: 3 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-green-400 rounded-full"
-              style={{
-                left: `${20 + i * 30}%`,
-                top: `${20 + i * 20}%`,
-              }}
-              animate={{
-                y: [-10, 10, -10],
-                opacity: [0.5, 1, 0.5],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: i * 0.5,
-              }}
-            />
-          ))}
-        </motion.div>
-      </div>
-    </motion.div>
-  );
-};
-
-const TimelineNode = ({ experience, index, progress }) => {
-  const nodeRef = useRef(null);
-  const isInView = useInView(nodeRef, { once: true, margin: "-50px" });
-  const isActive = progress > index / experiences.length;
-
-  return (
-    <motion.div
-      ref={nodeRef}
-      initial={{ scale: 0 }}
-      animate={isInView ? { scale: 1 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.2 }}
-      className="absolute left-1/2 transform -translate-x-1/2 z-10"
-      style={{ top: `${index * 25 + 12.5}%` }}
-    >
-      <motion.div
-        animate={isActive ? {
-          scale: [1, 1.2, 1],
-          boxShadow: [
-            '0 0 20px rgba(34, 197, 94, 0.5)',
-            '0 0 40px rgba(34, 197, 94, 0.8)',
-            '0 0 20px rgba(34, 197, 94, 0.5)'
-          ]
-        } : {}}
-        transition={{ duration: 2, repeat: Infinity }}
-        className={`w-12 h-12 rounded-full border-4 flex items-center justify-center transition-all duration-500 ${
-          isActive 
-            ? 'bg-green-400 border-green-300 text-gray-900' 
-            : 'bg-gray-800 border-gray-600 text-green-400'
-        }`}
-      >
-        {experience.icon}
-      </motion.div>
-      
-      {/* Pulse rings */}
-      {isActive && (
-        <>
-          <motion.div
-            animate={{ scale: [1, 2], opacity: [0.5, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="absolute inset-0 rounded-full border-2 border-green-400"
-          />
-          <motion.div
-            animate={{ scale: [1, 2.5], opacity: [0.3, 0] }}
-            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-            className="absolute inset-0 rounded-full border-2 border-blue-400"
-          />
-        </>
-      )}
-    </motion.div>
-  );
-};
-
-export const AnimatedExperienceTimeline = () => {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const progress = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const [progressValue, setProgressValue] = useState(0);
-  const [floatingSymbols, setFloatingSymbols] = useState([]);
-
-  useEffect(() => {
-    const unsubscribe = progress.onChange(setProgressValue);
-    return unsubscribe;
-  }, [progress]);
-
-  // Generate random floating symbols only on client
-  useEffect(() => {
-    const symbols = Array.from({ length: 8 }).map((_, i) => ({
-      symbol: ['<>', '{}', '[]', '/>', '&&', '||', '=>', '::'][i],
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-    }));
-    setFloatingSymbols(symbols);
-  }, []);
-
-  return (
-    <div
-      ref={containerRef}
-      className="relative min-h-screen bg-gradient-to-br from-black/80 via-gray-900/60 to-black/80 py-20 overflow-hidden"
-    >
-      {/* Floating Icons */}
-      <motion.div
-        animate={{ y: [-10, 10, -10] }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute top-20 left-20 text-green-400"
-      >
-        <Code size={24} className="opacity-40" />
-      </motion.div>
-
-      <motion.div
-        animate={{ y: [10, -10, 10] }}
-        transition={{ duration: 3, repeat: Infinity }}
-        className="absolute bottom-32 right-20 text-blue-400"
-      >
-        <Zap size={20} className="opacity-40" />
-      </motion.div>
-
-      <MatrixBackground />
-
-      {/* Header */}
-      <div className="text-center mb-16 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="space-y-4"
-        >
-          <h2 className="text-4xl md:text-6xl font-bold font-mono text-white mb-4">
-            experience<span className="text-green-400">.</span>
-            <span className="text-blue-400">Timeline</span>
-            <span className="text-purple-400">()</span>
-          </h2>
-          <div className="font-mono text-green-400 text-sm">
-            {"// Journey through the code matrix"}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Timeline Container */}
-      <div className="relative max-w-6xl mx-auto px-4">
-        <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-1 bg-gray-700">
-          <motion.div
-            className="absolute top-0 left-0 w-full bg-gradient-to-b from-green-400 via-blue-500 to-purple-600"
-            style={{
-              height: `${progressValue * 100}%`,
-              boxShadow: '0 0 10px rgba(34, 197, 94, 0.8)',
-            }}
-          />
-        </div>
-
-        {experiences.map((experience, index) => (
-          <div key={experience.id} className="relative">
-            <TimelineCard experience={experience} index={index} />
-            <TimelineNode experience={experience} index={index} progress={progressValue} />
-          </div>
-        ))}
-      </div>
-
-      {/* Progress Indicator */}
-      <motion.div
-        className="fixed top-1/2 right-8 transform -translate-y-1/2 z-20 hidden md:block"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
-        <div className="w-1 h-32 bg-gray-700 rounded-full relative">
-          <motion.div
-            className="absolute top-0 left-0 w-full bg-green-400 rounded-full transition-all duration-300"
-            style={{ height: `${progressValue * 100}%` }}
-          />
-        </div>
-        <div className="text-xs text-green-400 font-mono mt-2 text-center">
-          {Math.round(progressValue * 100)}%
-        </div>
-      </motion.div>
-
-      {/* Floating Symbols */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {floatingSymbols.map((item, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-green-400/20 font-mono text-lg"
-            style={{
-              left: item.left,
-              top: item.top,
-            }}
-            animate={{
-              x: [0, 100, 0],
-              y: [0, -50, 0],
-              rotate: [0, 360],
-              opacity: [0.1, 0.3, 0.1],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              delay: i * 2,
-            }}
+      {/* Card header strip */}
+      <div className="flex items-start justify-between p-7 pb-5">
+        <div className="flex items-center gap-4">
+          <div
+            className="w-12 h-12 rounded-2xl border border-white/12 flex items-center justify-center shrink-0"
+            style={{ background: "rgba(255,255,255,0.08)" }}
           >
-            {item.symbol}
-          </motion.div>
-        ))}
+            <Icon className="w-5 h-5 text-white/60" />
+          </div>
+          <div>
+            <p className="text-white/30 text-xs font-mono uppercase tracking-wider mb-0.5">
+              {exp.type === "work" ? "Work Experience" : "Education"}
+            </p>
+            <h3 className="text-lg font-bold text-white leading-tight">{exp.title}</h3>
+          </div>
+        </div>
+        <div
+          className="text-white/30 text-xs font-mono px-3 py-1.5 rounded-full border border-white/[0.07] shrink-0 mt-1"
+          style={{ background: "rgba(255,255,255,0.03)" }}
+        >
+          {exp.period}
+        </div>
       </div>
-    </div>
+
+      {/* Divider */}
+      <div className="h-px mx-7" style={{ background: "rgba(255,255,255,0.06)" }} />
+
+      {/* Body */}
+      <div className="p-7 flex flex-col flex-1">
+        <div className="flex items-center gap-2 mb-4">
+          <ArrowUpRight className="w-3.5 h-3.5 text-white/25 shrink-0" />
+          <span className="text-white/55 text-sm font-medium">{exp.org}</span>
+        </div>
+
+        <p className="text-white/40 text-sm leading-relaxed flex-1 mb-6">{exp.description}</p>
+
+        {/* Tech tags */}
+        <div className="flex flex-wrap gap-2">
+          {exp.highlights.map((tag) => (
+            <span
+              key={tag}
+              className="px-3 py-1 rounded-xl text-xs border border-white/[0.08] text-white/40 font-mono"
+              style={{ background: "rgba(255,255,255,0.03)" }}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const AnimatedExperienceTimeline = () => {
+  const headerRef = useRef(null);
+  const headerInView = useInView(headerRef, { once: true });
+
+  return (
+    <section className="min-h-screen bg-[#080808] px-4 md:px-6 py-24 relative overflow-hidden flex items-center">
+      <BlobBackground />
+
+      <div className="max-w-7xl w-full mx-auto relative z-10">
+
+        <motion.div
+          ref={headerRef}
+          initial={{ opacity: 0, y: 16 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="mb-8 flex items-baseline justify-between border-b border-white/[0.06] pb-5"
+        >
+          <h2 className="text-3xl lg:text-5xl font-bold text-white">My Journey</h2>
+          <span className="text-white/25 font-mono text-xs uppercase tracking-widest">Career</span>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {experiences.map((exp, index) => (
+            <ExperienceCard key={exp.id} exp={exp} index={index} />
+          ))}
+        </div>
+
+      </div>
+    </section>
   );
 };
 

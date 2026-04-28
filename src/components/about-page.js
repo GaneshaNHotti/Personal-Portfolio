@@ -1,98 +1,142 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code, Zap, Terminal } from 'lucide-react';
+import { Briefcase, MapPin, Zap, Building2 } from "lucide-react";
 
-
-const aboutLines = [
-  "# Meet the Developer",
-  "developer = {",
-  '  "name": "Ganesha N Hotti",',
-  '  "location": "Bangalore, India",',
-  '  "role": "Software Engineer",',
-  '  "experience": "3 Years",',
-  '  "skills": ["Python", "JavaScript", "Angular", "React", "MySQL"],',
-  '  "interests": ["Backend Dev", "Full Stack Dev", "Tech for Good"],',
-  '  "currently": "Building scalable, future-ready solutions",',
-  '  "status": "Available for new opportunities ✨"',
-  "};",
-  "",
-  "print(developer)",
-  "print('Always debugging life and software 🐞');",
+const stats = [
+  { icon: Briefcase, label: "Experience",  value: "4 Years"  },
+  { icon: Building2, label: "Employer",    value: "Boeing"    },
+  { icon: MapPin,    label: "Location",    value: "Bangalore" },
+  { icon: Zap,       label: "Status",      value: "Available" },
 ];
 
-const getLineColor = (line) => {
-  if (line.startsWith("#")) return "text-green-400";
-  if (line.includes("✨")) return "text-yellow-400";
-  if (line.includes('"')) return "text-yellow-400";
-  if (line.includes("[")) return "text-blue-400";
-  if (line.includes("print")) return "text-purple-400";
-  return "text-white";
-};
-
-const AboutTitle = () => (
-  <div className="text-center mt-16 mb-10">
-    <h2 className="text-4xl lg:text-6xl font-bold text-white font-mono text-white mb-4">
-      <span className="text-white">self</span>
-      <span className="text-blue-400">.About</span>
-      <span className="text-purple-400">()</span>
-    </h2>
-    <p className="mt-2 text-green-400 font-mono text-sm lg:text-base tracking-wide">
-        {"// Unpacking the developer behind the screen"}
-    </p>
+const BlobBackground = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <motion.div
+      className="absolute w-[600px] h-[600px] rounded-full"
+      style={{ background: "rgba(255,255,255,0.03)", filter: "blur(160px)", top: "5%", right: "-10%" }}
+      animate={{ x: [0, -50, 0], y: [0, 60, 0], scale: [1, 1.15, 1] }}
+      transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <motion.div
+      className="absolute w-[500px] h-[500px] rounded-full"
+      style={{ background: "rgba(255,255,255,0.02)", filter: "blur(130px)", bottom: "5%", left: "-5%" }}
+      animate={{ x: [0, 40, 0], y: [0, -40, 0], scale: [1, 1.1, 1] }}
+      transition={{ duration: 17, repeat: Infinity, ease: "easeInOut", delay: 6 }}
+    />
   </div>
 );
 
 const AboutSection = () => {
   return (
-    <section id="about" className="min-h-screen bg-black text-white flex items-center justify-center px-4 py-20 relative overflow-hidden">
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-gray-900/60 to-black/80" />
-        {/* Floating Elements */}
-              <motion.div
-                animate={{ y: [-10, 10, -10] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute top-20 left-20 text-green-400"
-              >
-                <Code size={24} className="opacity-40" />
-              </motion.div>
-              
-              <motion.div
-                animate={{ y: [10, -10, 10] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute bottom-32 right-20 text-blue-400"
-              >
-                <Zap size={20} className="opacity-40" />
-              </motion.div>
+    <section className="min-h-screen bg-[#080808] px-4 md:px-6 py-24 relative overflow-hidden flex items-center">
+      <BlobBackground />
 
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-7xl w-full bg-gray-900/90 border border-green-500/30 rounded-xl shadow-xl backdrop-blur-lg p-6 font-mono"
-      >
-        <div className="flex items-center mb-4 space-x-2 text-emerald-400 border-b border-gray-700 pb-2">
-          <Terminal className="w-5 h-5" />
-          <span className="text-sm">~$ cat about_me.py</span>
-        </div>
+      <div className="max-w-7xl w-full mx-auto relative z-10">
 
-        <AboutTitle />
+        {/* Header row */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-8 flex items-baseline justify-between border-b border-white/[0.06] pb-5"
+        >
+          <h2 className="text-3xl lg:text-5xl font-bold text-white">About Me</h2>
+          <span className="text-white/25 font-mono text-xs uppercase tracking-widest">Who I am</span>
+        </motion.div>
 
-        <div className="space-y-2">
-          {aboutLines.map((line, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.05, duration: 0.3 }}
-              className={`${getLineColor(line)} leading-relaxed`}
+        {/* Row 1 — Avatar card + Bio card */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+
+          {/* Avatar card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+            className="md:col-span-1 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-6 flex flex-col items-center justify-center gap-4 text-center"
+            style={{ background: "rgba(255,255,255,0.04)", minHeight: "200px" }}
+          >
+            <div
+              className="w-20 h-20 rounded-2xl border border-white/15 flex items-center justify-center text-2xl font-bold text-white select-none"
+              style={{ background: "rgba(255,255,255,0.09)" }}
             >
-              <span className="text-gray-600 select-none mr-3">{(idx + 1).toString().padStart(2, "0")}</span>
-              {line}
-            </motion.div>
-          ))}
+              GNH
+            </div>
+            <div>
+              <p className="text-white font-semibold text-sm">Ganesha N Hotti</p>
+              <p className="text-white/35 text-xs mt-0.5">Software Engineer</p>
+            </div>
+          </motion.div>
+
+          {/* Bio card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.08 }}
+            className="md:col-span-3 backdrop-blur-xl border border-white/[0.08] rounded-3xl p-8 flex flex-col justify-between"
+            style={{ background: "rgba(255,255,255,0.04)" }}
+          >
+            <div className="space-y-4">
+              <p className="text-white/65 text-base leading-relaxed">
+                Full Stack Developer with nearly{" "}
+                <span className="text-white font-semibold">4 years of experience</span>{" "}
+                focused on developing robust backend services and data-centric applications. Expert in{" "}
+                <span className="text-white font-semibold">Python (FastAPI, Flask)and SQL Server</span>,
+                with a proven track record of optimizing complex queries to improve application performance.
+              </p>
+              <p className="text-white/45 text-base leading-relaxed">
+                Proficient in building intuitive user interfaces using{" "}
+                <span className="text-white/65 font-semibold">React and Angular</span>{" "}
+                to streamline internal workflows. Graduated from{" "}
+                <span className="text-white/65">MS Ramaiah Institute of Technology</span> in Information
+                Science &amp; Engineering — dedicated to writing clean, testable code and delivering
+                production-ready features that solve real-world data challenges.
+              </p>
+            </div>
+
+            {/* Quote */}
+            <blockquote className="mt-6 pl-4 border-l-2 border-white/15">
+              <p className="text-white/30 italic text-sm">
+                &ldquo;Maybe, you can change the system too.&rdquo;
+              </p>
+            </blockquote>
+          </motion.div>
         </div>
-      </motion.div>
+
+        {/* Row 2 — 4 stat cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: 0.05 + index * 0.07 }}
+                whileHover={{ y: -4 }}
+                className="backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.14] rounded-3xl p-6 flex items-center gap-4 transition-all duration-300"
+                style={{ background: "rgba(255,255,255,0.04)" }}
+              >
+                <div
+                  className="w-10 h-10 rounded-xl border border-white/12 flex items-center justify-center shrink-0"
+                  style={{ background: "rgba(255,255,255,0.07)" }}
+                >
+                  <Icon className="w-4.5 h-4.5 text-white/55" />
+                </div>
+                <div>
+                  <p className="text-white font-bold text-lg leading-tight">{stat.value}</p>
+                  <p className="text-white/35 text-xs mt-0.5">{stat.label}</p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+      </div>
     </section>
   );
 };
