@@ -68,14 +68,16 @@ export default function Navbar() {
           <a
             href="#home"
             onClick={(e) => handleNavClick("home", e)}
-            className="font-bold text-lg text-white tracking-wider select-none"
+            className="flex items-center gap-0.5 select-none group"
           >
-            GNH
+            <span className="text-white/20 font-mono text-sm transition-colors group-hover:text-white/40">&lt;</span>
+            <span className="font-bold text-base text-white tracking-widest px-1.5">GNH</span>
+            <span className="text-white/20 font-mono text-sm transition-colors group-hover:text-white/40">/&gt;</span>
           </a>
 
           {/* Desktop nav — pill container with sliding active indicator */}
           <div
-            className="hidden md:flex items-center gap-0.5 relative p-1 rounded-full border border-white/[0.08]"
+            className="hidden lg:flex items-center gap-0.5 relative p-1 rounded-full border border-white/[0.08]"
             style={{ background: "rgba(255,255,255,0.04)" }}
           >
             <motion.div
@@ -101,7 +103,7 @@ export default function Navbar() {
 
           {/* Socials + mobile toggle */}
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-5">
               <a href="https://github.com/GaneshaNHotti" target="_blank" rel="noreferrer"
                 className="text-white/30 hover:text-white transition-colors">
                 <Github className="w-5 h-5" />
@@ -116,7 +118,7 @@ export default function Navbar() {
               </a>
             </div>
             <button
-              className="md:hidden text-white/40 hover:text-white transition-colors"
+              className="lg:hidden text-white/40 hover:text-white transition-colors"
               onClick={() => setMobileOpen((s) => !s)}
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -132,7 +134,7 @@ export default function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden border-t border-white/[0.06] overflow-hidden"
+              className="lg:hidden border-t border-white/[0.06] overflow-hidden"
               style={{ background: "rgba(0,0,0,0.95)" }}
             >
               <div className="px-6 py-4 flex flex-col gap-1">

@@ -74,7 +74,7 @@ const ProjectCard = ({ project, index }) => {
       }}
     >
       {/* Card header */}
-      <div className="flex items-start justify-between p-7 pb-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between p-5 sm:p-7 pb-5">
         <div className="flex items-center gap-4">
           <div
             className="w-12 h-12 rounded-2xl border border-white/12 flex items-center justify-center shrink-0"
@@ -90,7 +90,7 @@ const ProjectCard = ({ project, index }) => {
           </div>
         </div>
         <div
-          className="text-white/30 text-xs font-mono px-3 py-1.5 rounded-full border border-white/[0.07] shrink-0"
+          className="text-white/30 text-xs font-mono px-3 py-1.5 rounded-full border border-white/[0.07] self-start"
           style={{ background: "rgba(255,255,255,0.03)" }}
         >
           {project.org}

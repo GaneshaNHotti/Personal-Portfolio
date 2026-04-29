@@ -123,7 +123,7 @@ const ProgrammerHero = () => {
                 transition={{ delay: 1.6 }}
                 className="text-xl lg:text-2xl text-white/40 font-medium"
               >
-                Software Engineer
+                Fullstack Software Developer
               </motion.h2>
 
               <motion.p

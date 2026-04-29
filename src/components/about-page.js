@@ -118,17 +118,17 @@ const AboutSection = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: 0.05 + index * 0.07 }}
                 whileHover={{ y: -4 }}
-                className="backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.14] rounded-3xl p-6 flex items-center gap-4 transition-all duration-300"
+                className="backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.14] rounded-3xl p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left transition-all duration-300"
                 style={{ background: "rgba(255,255,255,0.04)" }}
               >
                 <div
-                  className="w-10 h-10 rounded-xl border border-white/12 flex items-center justify-center shrink-0"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-white/12 flex items-center justify-center shrink-0"
                   style={{ background: "rgba(255,255,255,0.07)" }}
                 >
-                  <Icon className="w-4.5 h-4.5 text-white/55" />
+                  <Icon className="w-4 h-4 text-white/55" />
                 </div>
                 <div>
-                  <p className="text-white font-bold text-lg leading-tight">{stat.value}</p>
+                  <p className="text-white font-bold text-base sm:text-lg leading-tight">{stat.value}</p>
                   <p className="text-white/35 text-xs mt-0.5">{stat.label}</p>
                 </div>
               </motion.div>
