@@ -9,7 +9,7 @@ import AnimatedContactForm from "../components/contact-page";
 
 export default function Home() {
   return (
-    <main className="bg-[#080808] text-white">
+    <main className="bg-transparent text-white">
       <section id="navbar">
         <FloatingProgrammerNav />
       </section>

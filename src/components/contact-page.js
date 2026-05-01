@@ -129,8 +129,7 @@ const AnimatedContactForm = () => {
     `border-white/[0.08] text-white placeholder:text-white/20 focus:border-white/30 focus:ring-1 focus:ring-white/10 transition-all${errors[field] ? " border-red-500/50" : ""}`;
 
   return (
-    <section className="min-h-screen bg-[#080808] px-4 md:px-6 py-24 relative overflow-hidden flex items-center">
-      <BlobBackground />
+    <section className="min-h-screen bg-transparent px-4 md:px-6 py-24 relative overflow-hidden flex items-center">
 
       <div className="max-w-7xl w-full mx-auto relative z-10">
 

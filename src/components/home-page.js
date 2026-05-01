@@ -90,8 +90,7 @@ const skillChips = [
 
 const ProgrammerHero = () => {
   return (
-    <section className="min-h-screen bg-[#080808] px-4 md:px-6 flex items-center relative overflow-hidden">
-      <BlobBackground />
+    <section className="min-h-screen bg-transparent px-4 md:px-6 flex items-center relative overflow-hidden">
 
       <div className="relative z-10 w-full max-w-7xl mx-auto pt-16 pb-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
