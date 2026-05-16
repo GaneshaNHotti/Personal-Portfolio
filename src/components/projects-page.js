@@ -93,8 +93,30 @@ const projects = [
     colSpan: "lg:col-span-1",
     featured: true,
   },
+  {
+    id: 5,
+    type: "professional",
+    title: "Agentic AI Query Pipeline",
+    org: "Boeing India Private Limited",
+    description:
+      "Multi-node agentic AI pipeline built with LangGraph, LangChain, and FastAPI, translating natural language into Neo4j Cypher and Oracle SQL. Features a fault-tolerant query engine with automatic plan repair, real-time SSE streaming, secure AST-whitelisted query compilation, and a state-driven architecture for enterprise asset data querying.",
+    bullets: [
+      "Architected and implemented a multi-node agentic AI pipeline using LangGraph and LangChain that translates natural language queries into Neo4j Cypher and Oracle SQL, enabling enterprise employees to query asset and work order data without database expertise.",
+      "Designed a real-time streaming API with FastAPI and Server-Sent Events (SSE), delivering token-by-token AI responses via an async event queue architecture (asyncio.create_task + EventCollector), reducing perceived latency for end users.",
+      "Built a fault-tolerant query execution engine with automatic plan repair, retry logic, critic-based validation, and graceful fallback to vector semantic search when exact matches fail — improving query success rates across ambiguous inputs.",
+      "Implemented secure query compilation with AST-whitelisted expression evaluation and field allowlists, preventing injection attacks across both Cypher and SQL compilers while supporting safe math computations on retrieved data.",
+      "Engineered a modular, state-driven graph pipeline (route → plan → execute → critic → merge → math → final) with in-memory result caching, cross-step placeholder resolution, and clarification dialogs for missing parameters — reducing redundant database calls and improving response accuracy."
+    ],
+    tech: ["LangGraph", "LangChain", "FastAPI", "Neo4j", "Oracle SQL", "Python", "Cypher"],
+    liveUrl: null,
+    githubUrl: null,
+    Icon: Server,
+    note: "Proprietary — code is confidential",
+    colSpan: "lg:col-span-2",
+    featured: true,
+  },
   // {
-  //   id: 5,
+  //   id: 6,
   //   type: "personal",
   //   title: "Real Time Chat App",
   //   org: "Personal Project",
